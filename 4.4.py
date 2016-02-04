@@ -25,10 +25,9 @@ def transition_matrix(a):
     return M
 
 def rand_vector(n):
-    a = np.rand(n)
+    a = np.random.rand(n)
     return a/sum(a)
 
-def find_eq(M):
 """
 Finds the equilibrium point of a transition Matrix
 
@@ -38,6 +37,8 @@ Args:
 Returns:
     The equilibrium point of a transition Matrix
 """
+
+def find_eq(M):
     D, V = np.linalg.eig(M)
     for x in xrange(D.size):
         if abs(D[x] - 1) < .0001:
@@ -103,9 +104,10 @@ def problem_443_rand():
     small = 0
     large = 0
     iter  = 100
+    M     = transition_matrix(.3)
 
     for x in xrange(iter):
-        p      = rand_vector()
+        p      = rand_vector(4)
         large += counter(0.05, p, M)
         small += counter(0.01, p, M)
     print('------------------------------------------------------------')
@@ -127,6 +129,7 @@ def problem_443():
     problem_443_specific(p_a)
     print('443b using random probability vectors to obatain')
     print('average number of iterations to get within epsilon')
+    problem_443_rand()
     print('Problem 443c using probability vector')
     print(p_c)
     print('we get')
@@ -138,3 +141,8 @@ def problem_443():
 
 
 problem_443()
+
+
+
+
+
