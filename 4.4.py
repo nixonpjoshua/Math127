@@ -29,35 +29,34 @@ def rand_vector(n):
     return a/sum(a)
 
 def find_eq(M):
+"""
+Finds the equilibrium point of a transition Matrix
 
-# Finds the equilibrium point of a transition Matrix
+Args:
+    M: the transition Matrix for the Jukes Cantor Algorithm 
 
-# Args:
-#     M: the transition Matrix for the Jukes Cantor Algorithm 
-
-# Returns:
-#     The equilibrium point of a transition Matrix
-
+Returns:
+    The equilibrium point of a transition Matrix
+"""
     D, V = np.linalg.eig(M)
     for x in xrange(D.size):
         if abs(D[x] - 1) < .0001:
             return V[:, x]/sum(V[:, x])
 
+"""
+Counts the number of time steps until the Jukes-Counter Algorithm
+raches a steady state.
 
+Args:
+          M: the transition Matrix for the Jukes Cantor Algorithm 
+        p_t: the initial probability vector specified by 4.4.3
+    epsilon: the acceptable error bound on the equilibrium value
+
+Returns:
+    Number of iterations required for the model to converge 
+    to within epsilon of the equilibrium value
+"""
 def counter(epsilon, p_t, M):
-
-# Counts the number of time steps until the Jukes-Counter Algorithm
-# raches a steady state.
-
-# Args:
-#           M: the transition Matrix for the Jukes Cantor Algorithm 
-#         p_t: the initial probability vector specified by 4.4.3
-#     epsilon: the acceptable error bound on the equilibrium value
-
-# Returns:
-#     Number of iterations required for the model to converge 
-#     to within epsilon of the equilibrium value
-
     p_eq = find_eq(M)
     def is_within_epsilon(p_t):
         t = True
@@ -70,15 +69,17 @@ def counter(epsilon, p_t, M):
         count += 1
     return count
 
+"""
+Performs simulations for all of the specific examples in problem 443
+
+Args:
+          p: probability vector
+
+Returns:
+    Number of iterations required for the model to converge 
+    to within epsilon of the equilibrium value
+"""
 def problem_443_specific(p):
-# Performs simulations for all of the specific examples in problem 443
-
-# Args:
-#           p: probability vector
-
-# Returns:
-#     Number of iterations required for the model to converge 
-#     to within epsilon of the equilibrium value
     M     = transition_matrix(.3)
     large = counter(0.05, p, M)
     small = counter(0.01, p, M)
@@ -90,12 +91,15 @@ def problem_443_specific(p):
     print(small)
     print('-------------------------------------------------------------')
 
+
+"""
+Performs simulations for a set of random probability vectors
+
+Returns:
+    Average Number of iterations required for the model to converge 
+    to within epsilon of the equilibrium value
+"""
 def problem_443_rand():
-# Performs simulations for a set of random probability vectors
-#
-# Returns:
-#     Average Number of iterations required for the model to converge 
-#     to within epsilon of the equilibrium value
     small = 0
     large = 0
     iter  = 100
@@ -112,10 +116,8 @@ def problem_443_rand():
     print(small/iter)
     print('-------------------------------------------------------------')
 
-
 def problem_443():
     # Solves Problem 443 by calling necessary functions
-    #   
     p_a = np.array([.2, .3, .4, .1])
     p_c = np.array([.25, .25, .25, .25])
     p_d = np.array([0, 1, 0, 0])
@@ -125,9 +127,6 @@ def problem_443():
     problem_443_specific(p_a)
     print('443b using random probability vectors to obatain')
     print('average number of iterations to get within epsilon')
-    # problem_443_rand()
-
-
     print('Problem 443c using probability vector')
     print(p_c)
     print('we get')
