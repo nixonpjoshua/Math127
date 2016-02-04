@@ -8,26 +8,25 @@
 
 import numpy as np
 
+"""
+Constructs a transition Matrix with a specified alpha level a
+Args:
+     a: alpha level for the Jukes Cantor Matrix
+Returns:
+     Transition Matrix corresponding to the Jukes-Cantor Algorithm
+"""
+
 def transition_matrix(a):
-# Constructs a transition Matrix with a specified alpha level a
-
-# Args:
-#     a: alpha level for the Jukes Cantor Matrix
-
-# Returns:
-#     Transition Matrix corresponding to the Jukes-Cantor Algorithm
-
-    b   = a/3
-    M   = np.array([[1-a, b, b, b], 
-                    [b, 1-a, b, b], 
-                    [b, b, 1-a, b], 
-                    [b, b, b, 1-a]
-                   ])
+    b = a/3
+    M = np.array([[1-a, b, b, b],
+                 [b, 1-a, b, b],
+                 [b, b, 1-a, b],
+                 [b, b, b, 1-a]])
     return M
 
-def rand_vector():
-# Creates a random probability vector 
-    return
+def rand_vector(n):
+    a = np.rand(n)
+    return a/sum(a)
 
 def find_eq(M):
 
@@ -140,16 +139,3 @@ def problem_443():
 
 
 problem_443()
-
-
-
-
-
-
-
-
-
-
-
-
-
