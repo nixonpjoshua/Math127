@@ -5,7 +5,7 @@
 #          Bidit Acharya
 #          Tracy Lou
 
-
+import matplotlib.pyplot as plt
 import numpy as np
 
 """
@@ -101,23 +101,29 @@ Returns:
     to within epsilon of the equilibrium value
 """
 def problem_443_rand():
-    small = 0
-    large = 0
-    iter  = 100
+    iter  = 10000
+    small = np.zeros(iter)
+    large = np.zeros(iter)
     M     = transition_matrix(.3)
-
+    
     for x in xrange(iter):
         p      = rand_vector(4)
-        large += counter(0.05, p, M)
-        small += counter(0.01, p, M)
+        large[x] = counter(0.05, p, M)
+        small[x] = counter(0.01, p, M)
     print('------------------------------------------------------------')
     print('average number of iterations to get within epsilon = .05 is:')
-    print(large/iter)
+    print(sum(large)/iter)
     print('-------------------------------------------------------------')
     print('average number of iterations to get within epsilon = .01 is:')
-    print(small/iter)
+    print(sum(small)/iter)
     print('-------------------------------------------------------------')
 
+    n, bins, patches = plt.hist(large, 7, normed = 1)
+    plt.plot(bins, 'r--')
+    plt.xlabel('number of iterations')
+    plt.ylabel('frequency')
+    plt.title('large')
+    plt.show()
 def problem_443():
     # Solves Problem 443 by calling necessary functions
     p_a = np.array([.2, .3, .4, .1])
