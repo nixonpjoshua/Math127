@@ -80,7 +80,7 @@ Returns:
     Number of iterations required for the model to converge 
     to within epsilon of the equilibrium value
 """
-def problem_443_specific(p):
+def problem_443(p):
     M     = transition_matrix(.3)
     large = counter(0.05, p, M)
     small = counter(0.01, p, M)
@@ -100,16 +100,19 @@ Returns:
     Average Number of iterations required for the model to converge 
     to within epsilon of the equilibrium value
 """
-def problem_443_rand():
-    iter  = 10000
+def simulate_convergence(a, iter):
     small = np.zeros(iter)
     large = np.zeros(iter)
-    M     = transition_matrix(.3)
+    M     = transition_matrix(a)
     
     for x in xrange(iter):
         p      = rand_vector(4)
         large[x] = counter(0.05, p, M)
         small[x] = counter(0.01, p, M)
+    return [small, large]
+def problem_443_rand(a, name):
+    iter = 10000
+    small, large = simulate_convergence(a, iter)
     print('------------------------------------------------------------')
     print('average number of iterations to get within epsilon = .05 is:')
     print(sum(large)/iter)
@@ -117,38 +120,58 @@ def problem_443_rand():
     print('average number of iterations to get within epsilon = .01 is:')
     print(sum(small)/iter)
     print('-------------------------------------------------------------')
-
-    n, bins, patches = plt.hist(large, 7, normed = 1)
-    plt.plot(bins, 'r--')
+    plt.figure(10*a)
+    n, bins, patches = plt.hist(large, 7)
+    plt.plot(bins)
     plt.xlabel('number of iterations')
     plt.ylabel('frequency')
-    plt.title('large')
-    plt.show()
-def problem_443():
-    # Solves Problem 443 by calling necessary functions
-    p_a = np.array([.2, .3, .4, .1])
-    p_c = np.array([.25, .25, .25, .25])
-    p_d = np.array([0, 1, 0, 0])
-    print('Problem 443a using probability vector')
-    print(p_a)
-    print('we get')
-    problem_443_specific(p_a)
-    print('443b using random probability vectors to obatain')
-    print('average number of iterations to get within epsilon')
-    problem_443_rand()
-    print('Problem 443c using probability vector')
-    print(p_c)
-    print('we get')
-    problem_443_specific(p_c)
-    print('Problem 443c using probability vector')
-    print(p_d)
-    print('we get')
-    problem_443_specific(p_d)
+    plt.title('large' + name)
+    plt.figure(10*a +1)
+    n, bins, patches = plt.hist(small, 9)
+    plt.plot(bins)
+    plt.xlabel('number of iterations')
+    plt.ylabel('frequency')
+    plt.title('small' + name)
+# Solves Problem 443 by calling necessary functions
+p_a = np.array([.2, .3, .4, .1])
+p_c = np.array([.25, .25, .25, .25])
+p_d = np.array([0, 1, 0, 0])
+print('Problem 443a using probability vector')
+print(p_a)
+print('we get')
+problem_443(p_a)
+print('443b using random probability vectors to obatain')
+print('average number of iterations to get within epsilon')
+problem_443_rand(.3, 'alpha .3')
+print('Problem 443c using probability vector')
+print(p_c)
+print('we get')
+problem_443(p_c)
+print('Problem 443c using probability vector')
+print(p_d)
+print('we get')
+problem_443(p_d)
 
+print 'trying alphas'
 
-problem_443()
-
-
-
-
-
+problem_443_rand(.6, 'alpha .6')
+alphasLarge = []
+alphasSmall = []
+iter = 50
+for a in xrange(1, iter):
+    small, large = simulate_convergence(float(a)/iter, iter*40)
+    alphasSmall.append(sum(small)/(iter*40))
+    alphasLarge.append(sum(large)/(iter*40))
+plt.figure(0)
+n, bins, patches = plt.hist(alphasSmall, 50)
+plt.plot(bins)
+plt.xlabel('alpha')
+plt.ylabel('avg convergence')
+plt.title('small alpha variation')
+plt.figure(1)
+n, bins, patches = plt.hist(alphasLarge, 50)
+plt.plot(bins)
+plt.xlabel('alpha')
+plt.ylabel('avg convergence')
+plt.title('large alpha variation')
+plt.show()
