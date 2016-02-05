@@ -7,22 +7,22 @@ def transition_matrix(a):
                  [b, b, b, 1-a]])
     return M
 def position_to_DNA(nuc):
-    if condition nuc == 'A':
+    if nuc == 'A':
         return 0
-    if condition nuc == 'G':
+    if nuc == 'G':
         return 1
-    if condition nuc == 'C':
+    if nuc == 'C':
         return 2
-    if condition nuc == 'T':
+    if nuc == 'T':
         return 3
 def DNA_to_position(pos):
-    if condition pos == 0:
+    if pos == 0:
         return 'A'
-    if condition pos == 1:
+    if pos == 1:
         return 'G'
-    if condition pos == 2:
+    if pos == 2:
         return 'C'
-    if condition pos == 3:
+    if pos == 3:
         return 'T'
 """
     mutates the DNA string seq, int t times
