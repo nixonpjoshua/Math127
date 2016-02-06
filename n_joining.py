@@ -18,7 +18,6 @@ def find_eq(M):
 # Returns:
 #     The equilibrium point of a transition Matrix
 
-
     D, V = np.linalg.eig(M)
     for x in xrange(D.size):
         if abs(D[x] - 1) < .0001:
