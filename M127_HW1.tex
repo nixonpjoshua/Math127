@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage [pdftex]{graphicx}
+\usepackage{amssymb}
+\usepackage{fancyvrb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{relsize}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{scrextend}
+\usepackage{cancel}
+\usepackage{setspace}
+\usepackage{wasysym}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{blindtext}
+\usepackage{tikz-cd}
+\usepackage{ifthen}
+\usepackage[top=1.2in, bottom=1.5in, left=1in, right=1in]{geometry}
+
+% the 'listings' package allows to embed entire .py files into TeX. 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{%
+    frame=tb,
+    language=Python,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    backgroundcolor=\color{light-gray},
+    numbers=left,
+    stepnumber=1,
+    numberfirstline=true,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    xleftmargin=0.25in,
+    xrightmargin=0.25in
+}
+
+
+\restylefloat{table}
+
+\DeclareMathSizes{12}{14}{12}{8}
+
+\DeclareMathOperator*{\dom}{dom}
+\DeclareMathOperator*{\Aut}{Aut}
+\DeclareMathOperator*{\Tor}{Tor}
+\DeclareMathOperator*{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator*{\End}{End}
+
+\newcommand{\BB}{\mathbb{B}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\on}{\operatorname}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\ul}{\underline}
+\newcommand{\ol}{\overline}
+\newcommand{\so}{\mathfrak{so}}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\li}{\liminf}
+\newcommand{\ls}{\limsup}
+\newcommand{\ran}{\rangle}
+\newcommand{\lan}{\langle}
+
+\newenvironment{poof}{
+                    \begin{addmargin}[2.5em]{1em} \textit{Proof.}
+                    }
+                    {
+                    \hfill $\qed$\end{addmargin}
+                    } %meant to be used inside the `claim' environment.
+
+
+\newtheorem*{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem*{problem}{Problem}
+\theoremstyle{remark}\newtheorem{claim}{Claim}
+\theoremstyle{remark}\newtheorem*{sol}{Solution}
+
+\title{Math 127: Assignment 1}
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lhead{\ifthenelse{\value{page}=1}{\bfseries}{Bidit Acharya, Tracy Lou, Joshua P. Nixon, Alex Pearson}}
+\rhead{\ifthenelse{\value{page}=1}{\bfseries}{Math 127 Assignment 1}}
+
+%=========document starts here=========
+\begin{document}
+
+\begin{center} {\Large \bf MATH 127: Computational Biology ~ Spring 2016 } \\
+                [8pt]{Assignment 1\\ [8pt]}\end{center}
+                
+                \begin{center} \textbf{Group 6}\\ Bidit Acharya, Tracy Lou, Josh Nixon, Alex Pearson
+                \end{center}
+\section{Project Outline}
+\blindtext
+
+\blindtext
+\section{\texttt {n\_join.py}}
+Following is the code for the neighbor joining algorithm:
+
+\section{\texttt {mutate.py}}
+\lstinputlisting{mutate.py}
+\section{Problems}
+
+%\begin{addmargin}[1.0em]{1em}
+%=========problem 4.4.3=========
+\begin{problem}[4.4.3] 
+Investigate the behavior of a model using a Jukes-Cantor matrix as you vary $\mathbf p_0$ by using a computer.\end{problem}
+\begin{enumerate}[a.]
+\item With the value of $M$ and $\mathbf {p_0}$ suggested, do you see $\mathbf {p_t}$ approach its equilibrium value? Approximately how many time steps are necessary for all the $\mathbf {p_t}$ to be within .05 of the equilibrium? within .01?
+\begin{sol}
+
+\end{sol}
+
+\item Make several other choices of $\mathbf {p_0}$ and repeat step (a). 
+\begin{sol}
+
+\end{sol}
+
+\item Using $\mathbf {p_0}= (.25,.25,.25,.25)$, what do you observe? Why?
+\begin{sol}
+
+\end{sol}
+
+\item Using $\mathbf {p_0}= (0,1,0,0)$, what do you observe? What is the biological meaning of this $\mathbf {p_0}$?
+\begin{sol}
+
+\end{sol}
+\end{enumerate}
+
+%=========problem 4.4.4=========
+\begin{problem}[4.4.4] Investigate the effect of varying α on the behavior produced by the Jukes-Cantor matrix. Let $\mathbf {p_0}=(.2,.3,.4,.1)$ and use MATLAB commands such as those in the previous exercise to:
+\end{problem}
+\begin{enumerate}[a.]
+\item Compare the behavior of the model for $\alpha = .03$ and $\alpha = .06$. For which value of α does the model approach the equilibrium fastest?
+\begin{sol}
+
+\end{sol}
+
+\item Does your observation in part (a) hold for other initial choices of $\mathbf {p_0}$? 
+\begin{sol}
+
+\end{sol}
+
+\item Explain in intuitive terms why larger values of α should result in a quicker approach to the equilibrium.
+\begin{sol}
+
+\end{sol}
+\end{enumerate}
+
+%\end{addmargin}
+\end{document}
