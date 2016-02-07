@@ -116,12 +116,16 @@
                 \begin{center} \textbf{Group 6}\\ Bidit Acharya, Tracy Lou, Josh Nixon, Alex Pearson
                 \end{center}
 \section{Project Outline}
-\blindtext
+This project will investigate the mathematical and computational techniques used in modeling the evolutionary relationships between different organisms and viruses such as HIV. Furthermore, we will be using a variety of software to input DNA sequences in order to create phylogenetic trees that will be able to map, as accurately as we can, the distance between different organisms over time.
 
-\blindtext
-\section{\texttt {n\_join.py}}
+We will be using NumPy, matplotlib, and some software we have yet to agree upon to output phylogenetic trees. Currently, we are thinking about using the Unweighted Pair Group Method with Arithmetic Mean (UPGMA) algorithm in our Neighbor Joining algorithm.
+
+%=========n\_joining.py=========
+\section{\texttt {n\_joining.py}}
 Following is the code for the neighbor joining algorithm:
+\lstinputlisting{n_joining.py}
 
+%=========mutate.py=========
 \section{\texttt {mutate.py}}
 \lstinputlisting{mutate.py}
 \section{Problems}
@@ -137,18 +141,19 @@ Investigate the behavior of a model using a Jukes-Cantor matrix as you vary $\ma
 \end{sol}
 
 \item Make several other choices of $\mathbf {p_0}$ and repeat step (a). 
-\begin{sol}
+\begin{sol} See code below.
 
 \end{sol}
 
 \item Using $\mathbf {p_0}= (.25,.25,.25,.25)$, what do you observe? Why?
 \begin{sol}
+We first see that the eigenvalue for this eigenvector is 1 as expected from the Jukes-Cantor model. Moreover, when we set $\mathbf {p_0}= (.25,.25,.25,.25)$, we observed that it took 0 steps to converge since it is already at equilibrium. t
 
 \end{sol}
 
 \item Using $\mathbf {p_0}= (0,1,0,0)$, what do you observe? What is the biological meaning of this $\mathbf {p_0}$?
 \begin{sol}
-
+Since $\mathbf {p_0}$ is not at equilibrium, it will of course work its way and gravitate towards $\mathbf {p_0}= (.25,.25,.25,.25)$. Biologically, because the order is (A,G,C,T), this means the initial sequence is composed of all G's since G has probability of 1.
 \end{sol}
 \end{enumerate}
 
@@ -158,19 +163,25 @@ Investigate the behavior of a model using a Jukes-Cantor matrix as you vary $\ma
 \begin{enumerate}[a.]
 \item Compare the behavior of the model for $\alpha = .03$ and $\alpha = .06$. For which value of α does the model approach the equilibrium fastest?
 \begin{sol}
-
+The model approaches equilibrium fastest when $\alpha = .06$
 \end{sol}
 
 \item Does your observation in part (a) hold for other initial choices of $\mathbf {p_0}$? 
 \begin{sol}
+Yes. The graphs that were plotted showed that when the mutation rate was lower, it took longer for the model to reach equilibrium. Generated plots using \texttt{matplotlib}. See code below.
 
 \end{sol}
 
 \item Explain in intuitive terms why larger values of α should result in a quicker approach to the equilibrium.
 \begin{sol}
-
+$\alpha$ is the mutation rate according the matrix model. The values of $\alpha$ not on the diagonal given by  $\alpha$/3 , correspond to the rates of not mutating. Hence, the greater $\alpha$ is, the greater the probability of mutation. Further, the the vector $\mathbf {p_0}$ will also converge to equilibrium quicker.
 \end{sol}
 \end{enumerate}
+
+%=========code=========
+\section{\texttt {Code used to generate plots to answer questions 4.4.3 and 4.4.4}}
+\lstinputlisting{4.4.py}
+
 
 %\end{addmargin}
 \end{document}

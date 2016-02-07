@@ -152,7 +152,7 @@ print(p_d)
 print('we get')
 problem_443(p_d)
 
-print 'trying alphas'
+print ('trying alphas')
 
 problem_443_rand(.6, 'alpha .6')
 alphasLarge = []
