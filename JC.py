@@ -67,7 +67,19 @@ def prop_diff(s1,s2):
         i += 1
     return float(diffs)/float(len(s1))
 
+"""
+Computes the JC distance between two sequences.
+Args:
+    s1: string 1
+    s2: string 2 
+Returns:
+    Throws error if the strings are not of the same length
+    Else, computes JC distance
+"""
 
+def JC_distance(s1,s2):
+    prop_diff = prop_diff(s1,s2)
+return 1 - (np.log(1 - 4/3*prop_diff))
 
 """
 Finds the equilibrium point of a transition Matrix
