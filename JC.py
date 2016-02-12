@@ -90,11 +90,11 @@ Returns:
 """
 def find_min(M):
     """
-    >>>find_min(np.array([[0, .45, .27, .53],
-                          [0,   0, .40, .50],
-                          [0,   0,   0, .62],
-                          [0,   0,   0,  0]
-                          ]))
+    >>> find_min(np.array([[0, .45, .27, .53],
+                           [0,   0, .40, .50],
+                           [0,   0,   0, .62],
+                           [0,   0,   0,  0]
+                           ]))
     2
     """
     upr   = M.shape[0]*M.shape[1]
@@ -129,6 +129,7 @@ def new_dist(M):
               [0,    0,  .50]
               ])
     """
+    return "Need to implement this function"
 
 """
 Work-Horse function of UPGMA Algorithm, that given an array of sequences
