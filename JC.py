@@ -1,4 +1,4 @@
-# Group 6: Neighbhor Joining Algorithm 
+# Group 6: UPGMA Algorithm using Jukes Cantor Distance
 
 # Authors: Josh Nixon
 #          Alex Pearson
@@ -79,54 +79,64 @@ Returns:
 
 def JC_distance(s1,s2):
     prop_diff = prop_diff(s1,s2)
-return 1 - (np.log(1 - 4/3*prop_diff))
+    return 1 - (np.log(1 - 4/3*prop_diff))
 
 """
-Finds the equilibrium point of a transition Matrix
+Computes the index of the minimum distance in distance matrix.
+Args:
+    M: distance matrix
+Returns:
+    index of the minimum entry of the Matrix
+"""
+def find_min(M):
+    """
+    >>>find_min(np.array([[0, .45, .27, .53],
+                          [0,   0, .40, .50],
+                          [0,   0,   0, .62],
+                          [0,   0,   0,  0]
+                          ]))
+    2
+    """
+    upr   = M.shape[0]*M.shape[1]
+    small = 99 # Dummy value. Distances must always be < 1
+    index = 0
+    i     = 0
+    while i < upr:
+        if (M.item(i) < small) and (M.item(i) != 0):
+            small = M.item(i) 
+            index = i
+        i += 1
+    return index
 
+"""
+Computes the subsequent Distance Matrix of the UPGMA algorithm 
 Args:
     M: the transition Matrix for the Jukes Cantor Algorithm 
 
 Returns:
-    The equilibrium point of a transition Matrix
+    subsequent matrix using UPGMA
 """
 
-def find_eq(M):
-    D, V = np.linalg.eig(M)
-    for x in xrange(D.size):
-        if abs(D[x] - 1) < .0001:
-            return V[:, x]/sum(V[:, x])
+def new_dist(M):
+    """
+    >>> new_dist(np.array([[0, .45, .27, .53],
+                             [0,   0, .40, .50],
+                             [0,   0,   0, .62],
+                             [0,   0,   0,  0]
+                             ]))
+    
+    np.array([[0, .425, .575],
+              [0,    0,  .50]
+              ])
+    """
 
 """
-Counts the number of time steps until the Jukes-Counter Algorithm
-raches a steady state.
-
-Args:
-          M: the transition Matrix for the Jukes Cantor Algorithm 
-        p_t: the initial probability vector specified by 4.4.3
-    epsilon: the acceptable error bound on the equilibrium value
-
-Returns:
-    Number of iterations required for the model to converge 
-    to within epsilon of the equilibrium value
+Work-Horse function of UPGMA Algorithm, that given an array of sequences
+returns a phylogenetic tree of distances represented as a list of lists
 """
-def counter(epsilon, p_t, M):
-    p_eq = find_eq(M)
-    def is_within_epsilon(p_t):
-        t = True
-        for i in xrange(p_t.size):
-            t = t and abs(p_eq[i] - p_t[i]) < epsilon
-        return t
-    count = 0
-    while not is_within_epsilon(p_t):
-        p_t = M.dot(p_t)
-        count += 1
-    return count
 
-
-
-
-
+def JC_UPGMA(M):
+    return "Need to implement this function"
 
 
 
