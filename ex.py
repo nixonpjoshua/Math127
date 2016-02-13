@@ -1,4 +1,5 @@
 import numpy as np 
+from numpy import linalg as LA
 
 """
 How to write doctests
@@ -53,6 +54,17 @@ def num_div(n,k):
 		if n < k*i:
 			return i-1
 		i += 1
+
+# i = 0
+# while i < 10:
+# 	foo = np.dot(foo,foo)
+# 	print(foo)
+# 	i += 1
+i = np.array([[5, 0], [3, -5]])
+print(LA.matrix_power(i, 3))
+
+
+
 
 
 
