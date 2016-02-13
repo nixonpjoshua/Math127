@@ -5,6 +5,7 @@
 #          Bidit Acharya
 #          Tracy Lou
 
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -20,7 +21,7 @@ def JC_matrix(a):
 
     """
     >>> np.trace(JC_matrix(.25))
-    2
+    3.0
     """
 
     b = a/3
@@ -53,10 +54,10 @@ Returns:
 """
 
 def prop_diff(s1,s2):
-    """
-    >>> prop_diff("ATTGAC",ATGGCC) 
-    float(2)/float(6)
-    """
+    # """
+    # >>> prop_diff("ATTGAC","ATGGCC") 
+    # float(2)/float(6)  
+    # """
     if len(s1) != len(s2):
         raise ValueError("Cannot compute compare DNA sequences of differing lenth")
     diffs = 0
@@ -90,11 +91,7 @@ Returns:
 """
 def find_min(M):
     """
-    >>> find_min(np.array([[0, .45, .27, .53],
-                           [0,   0, .40, .50],
-                           [0,   0,   0, .62],
-                           [0,   0,   0,  0]
-                           ]))
+    >>> find_min(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
     2
     """
     upr   = M.shape[0]*M.shape[1]
@@ -119,15 +116,8 @@ Returns:
 
 def new_dist(M):
     """
-    >>> new_dist(np.array([[0, .45, .27, .53],
-                             [0,   0, .40, .50],
-                             [0,   0,   0, .62],
-                             [0,   0,   0,  0]
-                             ]))
-    
-    np.array([[0, .425, .575],
-              [0,    0,  .50]
-              ])
+    >>> new_dist(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
+    np.array([[0, .425, .575],[0,    0,  .50],[0,    0,    0]])
     """
     return "Need to implement this function"
 
