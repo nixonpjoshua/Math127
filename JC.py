@@ -5,6 +5,10 @@
 #          Bidit Acharya
 #          Tracy Lou
 
+A = np.array([[0, 1, 2],
+              [3, 4, 5],
+              [6, 7, 8],
+             ])
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,17 +35,6 @@ def JC_matrix(a):
                  [b, b, b, 1-a]])
     return M
 
-"""
-Constructs a random probability vector, represented as an array of size n
-Args:
-     n: number of entries in the probability vector
-Returns:
-     random probability vector
-"""
-
-def rand_vector(n):
-    a = np.random.rand(n)
-    return a/sum(a)
 
 """
 Computes proportion of differing letters from two strings of the same size
@@ -54,7 +47,7 @@ Returns:
 """
 
 def prop_diff(s1,s2):
-    # """
+    # """ LOOK curious as to why this isn't working
     # >>> prop_diff("ATTGAC","ATGGCC") 
     # float(2)/float(6)  
     # """
@@ -105,11 +98,27 @@ def find_min(M):
         i += 1
     return index
 
+def get_row(M):
+    index = find_min(M)
+    return
+
+"""
+Computes the column number of the nearest neighbor of the matrix  
+Args:
+    nearest:  index of the smallest distance in the matrix
+    num_cols: number of columns in the array
+Returns:
+    subsequent matrix using UPGMA
+"""
+
+def get_col(nearest, num_cols):
+    col_num = nearest % num_cols
+    return  col_num
+
 """
 Computes the subsequent Distance Matrix of the UPGMA algorithm 
 Args:
     M: the transition Matrix for the Jukes Cantor Algorithm 
-
 Returns:
     subsequent matrix using UPGMA
 """
@@ -119,6 +128,14 @@ def new_dist(M):
     >>> new_dist(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
     np.array([[0, .425, .575],[0,    0,  .50],[0,    0,    0]])
     """
+    num_rows = M.shape[0]
+    num_cols = M.shape[1]
+    nearest  = find_min(M)
+    min_row  = get_row(M) # equiv. to species 1
+    min_col  = get_col(nearest, num_cols) # equiv. to species 2
+    ans      = np.zeroes((num_rows - 1, num_cols - 1))
+
+
     return "Need to implement this function"
 
 """

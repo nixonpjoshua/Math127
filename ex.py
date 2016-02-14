@@ -29,8 +29,9 @@ def JC_matrix(a):
 
 foo = JC_matrix(.2)
 
-bar = np.array([[-1,3],
-				[2,-5]
+bar = np.array([[-1,3,4],
+				[2,-5,6],
+				[0,2,9]
 				])
 
 # ans = np.dot(bar,bar)
@@ -60,8 +61,12 @@ def num_div(n,k):
 # 	foo = np.dot(foo,foo)
 # 	print(foo)
 # 	i += 1
-i = np.array([[5, 0], [3, -5]])
-print(LA.matrix_power(i, 3))
+# i = np.array([[5, 0], [3, -5]])
+# print(LA.matrix_power(i, 3))
+
+# print(np.zeros((3,3)))
+
+
 
 
 
