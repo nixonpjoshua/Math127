@@ -5,14 +5,23 @@
 #          Bidit Acharya
 #          Tracy Lou
 
-A = np.array([[0, 1, 2],
-              [3, 4, 5],
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+
+############# Defined for Testing ##############
+
+A = np.array([[5, 3, 2],
+              [1, 4, 5],
               [6, 7, 8],
              ])
 
-import matplotlib.pyplot as plt
-import numpy as np
+B = np.array([[5, 3, 9],
+              [3, 4, 1],
+              [6, 7, 8],
+             ])
 
+################################################
 """
 Constructs a Jukes Cantor transition Matrix with a specified alpha level a
 Args:
@@ -98,9 +107,24 @@ def find_min(M):
         i += 1
     return index
 
+"""
+Computes the column number of the nearest neighbor of the matrix  
+Args:
+    nearest:  index of the smallest distance in the matrix
+    num_cols: number of columns in the array
+Returns:
+    subsequent matrix using UPGMA
+"""
+
 def get_row(M):
-    index = find_min(M)
-    return
+	"""
+	>>> get_row(A)
+	1.0
+	"""
+	nearest  = find_min(M)
+	row_size = M.shape[1]
+	ans      = math.floor(nearest/row_size)
+	return ans
 
 """
 Computes the column number of the nearest neighbor of the matrix  
@@ -111,9 +135,15 @@ Returns:
     subsequent matrix using UPGMA
 """
 
-def get_col(nearest, num_cols):
-    col_num = nearest % num_cols
-    return  col_num
+def get_col(M):
+	"""
+	>>> get_col(A)
+	2
+	"""
+	num_cols = M.shape[1]
+	nearest  = find_min(M)
+	col_num  = nearest % num_cols
+	return  col_num
 
 """
 Computes the subsequent Distance Matrix of the UPGMA algorithm 
@@ -128,15 +158,27 @@ def new_dist(M):
     >>> new_dist(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
     np.array([[0, .425, .575],[0,    0,  .50],[0,    0,    0]])
     """
-    num_rows = M.shape[0]
-    num_cols = M.shape[1]
-    nearest  = find_min(M)
-    min_row  = get_row(M) # equiv. to species 1
-    min_col  = get_col(nearest, num_cols) # equiv. to species 2
-    ans      = np.zeroes((num_rows - 1, num_cols - 1))
+    min_row   = get_row(M)       # equiv. to  species 1
+    min_col   = get_col(M)       # equiv. to  species 2
+    num_rows  = M.shape[0] 
+    num_cols  = M.shape[1]
+    new_spec  = min(min_row,min_col)
+    ans       = np.zeros((num_rows - 1, num_cols - 1))
+    
+    # will use new spec as the row of my "new species" in the new matrix
 
-
-    return "Need to implement this function"
+    for i in xrange(num_rows):
+    	for j in xrange(num_cols):
+    		if i >= j: #only analyzing upper triangle of entries
+    			pass
+    		elif i == min_row and j == min_col:
+    			pass
+    		else:
+    			ans[i][j] = (M[][] + M[][])/2
+    		else:
+    			ans[i][j] = M[i][j]
+  
+    return ans
 
 """
 Work-Horse function of UPGMA Algorithm, that given an array of sequences
