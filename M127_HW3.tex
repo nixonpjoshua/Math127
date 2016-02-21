@@ -1,0 +1,163 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage [pdftex]{graphicx}
+\usepackage{amssymb}
+\usepackage{fancyvrb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{relsize}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{scrextend}
+\usepackage{cancel}
+\usepackage{setspace}
+\usepackage{wasysym}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{blindtext}
+\usepackage{tikz-cd}
+\usepackage{ifthen}
+\usepackage[top=1.2in, bottom=1.5in, left=1in, right=1in]{geometry}
+
+% the 'listings' package allows to embed entire .py files into TeX. 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{%
+    frame=tb,
+    language=Python,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    backgroundcolor=\color{light-gray},
+    numbers=left,
+    stepnumber=1,
+    numberfirstline=true,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    xleftmargin=0.25in,
+    xrightmargin=0.25in
+}
+
+
+\restylefloat{table}
+
+\DeclareMathSizes{12}{14}{12}{8}
+
+\DeclareMathOperator*{\dom}{dom}
+\DeclareMathOperator*{\Aut}{Aut}
+\DeclareMathOperator*{\Tor}{Tor}
+\DeclareMathOperator*{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator*{\End}{End}
+
+\newcommand{\BB}{\mathbb{B}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\on}{\operatorname}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\ul}{\underline}
+\newcommand{\ol}{\overline}
+\newcommand{\so}{\mathfrak{so}}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\li}{\liminf}
+\newcommand{\ls}{\limsup}
+\newcommand{\ran}{\rangle}
+\newcommand{\lan}{\langle}
+
+\newenvironment{poof}{
+                    \begin{addmargin}[2.5em]{1em} \textit{Proof.}
+                    }
+                    {
+                    \hfill $\qed$\end{addmargin}
+                    } %meant to be used inside the `claim' environment.
+
+
+\newtheorem*{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem*{problem}{Problem}
+\theoremstyle{remark}\newtheorem{claim}{Claim}
+\theoremstyle{remark}\newtheorem*{sol}{Solution}
+
+\title{Math 127: Assignment 2}
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lhead{\ifthenelse{\value{page}=1}{\bfseries}{Bidit Acharya, Tracy Lou, Joshua P. Nixon, Alex Pearson}}
+\rhead{\ifthenelse{\value{page}=1}{\bfseries}{Math 127 Assignment 2}}
+
+%=========document starts here=========
+\begin{document}
+
+\begin{center} {\Large \bf MATH 127: Computational Biology Spring 2016 } \\
+                [8pt]{Assignment 3\\ [8pt]}\end{center}
+                
+                \begin{center} \textbf{Group 6}\\ Bidit Acharya, Tracy Lou, Josh Nixon, Alex Pearson
+                \end{center}
+                
+%====================project outline============
+\section{Project Outline: A Comparison of Phylogenetic Inference Algorithms and Distance Methods}
+
+\par This project investigates a few of the many mathematical and computational techniques used to model evolution between different species. The algorithms compared were \textbf{UPGMA (Unweighted Pair Group Method with Arithmetic Mean)} and \textbf{Neighbor-Joining}. Further, these phylogenetic inference algorithms yielded trees according to evolution simulated by these three different distance methods: the \textbf{Jukes-Cantor}, \textbf{Kimura-2}, and \textbf{Kimura-3} Markov models (Markov models are models  with the property that changes imposed on the future state of the system is dependent on only present state and not the many previous states before). Once possible trees were drawn, we advanced our model by using the \textbf{traditional parsimony} algorithm to calculate the parsimony cost of each given tree that was computed. By implementing a wide range of different distance methods and inference algorithms, our results can be applied towards practical biological problems such as determining if a dentist infected his patients with HIV; or towards more general problems such as understanding the role and possible progression (or reduction) of noncoding DNA within differing species' genomes over time. In addition to the biological applications, this project explored the refinement of the phylogenetic inference algorithms and distance methods through demonstration and discussion of the striking differences between the results acquired.
+
+\par To begin, evolution was simulated using a function, \texttt{mutate (A, t, seq)}, on sample DNA sequences. This function "mutated" the aforementioned sequence according to time and the individual parameters given by each distance method. For instance, when using the function \texttt{mutate()} to simulate evolution according to the Jukes-Cantor model, Jukes-Cantor distances between the ancestor and progeny sequences were computed and compared to the genuine distances for accuracy. Once these distances were calculated, phylogenetic inference algorithms, such as the neighbor-joining algorithm, were implemented to produce phylogenetic trees. These trees, like the distances, were then compared to the proven, legitimate tree. This was extended by simulating evolution according to the different distance methods and then implementing the two inference algorithms on both to get the best tree.
+
+\par The first and simplest mathematical model used was the \textbf{Jukes-Cantor} model. The Jukes-Cantor model begins by assuming all bases (nucleotides) within a DNA sequence occur with equal probability: \(\frac{1}{4}\). Secondly, it also assumes that the conditional probabilities of the observable base substitutions are the same. This means the likelihood of the purine (Adenine(\textbf{A}) and Guanine(\textbf{G}) being substituted by a pyrimidine (Cytosine(\textbf{C}) and Thymine(\textbf{T})) has equal probability. The pitfall of the second assumption is that sort of substitution is highly unlikely because of the steric hindrance and chemical properties between their molecular structures. Lastly, this model--and the other ones as well--adopts the \textit{molecular clock} assumption which presumes that DNA mutation rates of observable substitutions, $\alpha$, are constant. Realistically, the rates may not be constant, since it has been shown that the rates can be dependent on whether DNA is noncoding or coding and can change based upon the time and location of a particular sequence within DNA. Despite making many assumptions, this model was useful in that it allows preliminary estimation calculations to be made. 
+
+\par Unlike the Jukes-Cantor model, the \textbf{Kimura} models consider more than one parameter to compute the distances between ancestor and progeny DNA sequences. In addition to mutation rates, the \textbf{Kimura-2} model incorporates different rates of transitions, $\beta$, (e.g.purine $\longleftrightarrow$ purine) and different rates of transversions, $\gamma$ (e.g.purine $\longleftrightarrow$ pyrimidine). Biologically, there are two types of transversions: an exchange between one-ring and two-ring structures.The \textbf{Kimura-3} takes this into account by considering a third parameter, $\delta$, for the rates of two-ring transversions. Distances between initial and final sequences were compared using both models that were used in the phylogenetic inference algorithms.
+
+\par The next area of adjustment is based upon the difference between two phylogenetic inference algorithms: Neighbor-Joining and UPGMA. 
+
+
+%=================problems, 5.1.3==================
+\section{Problems}
+
+\begin{problem}[5.1.3] 
+\end{problem}
+\begin{enumerate}[a.]
+
+\item 
+\begin{sol} 
+\end{sol}
+
+\item 
+\begin{sol}
+\end{sol}
+
+
+\end{enumerate}
+
+%==============5.1.7===================================
+\begin{problem}[5.1.7] 
+\end{problem}
+
+\begin{sol}
+\end{sol}
+
+
+%=======================code============================
+\section{\texttt{Code used to answer question 5.1.7}}
+
+
+\end{document}
