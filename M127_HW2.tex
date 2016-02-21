@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage [pdftex]{graphicx}
+\usepackage{amssymb}
+\usepackage{fancyvrb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{relsize}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{scrextend}
+\usepackage{cancel}
+\usepackage{setspace}
+\usepackage{wasysym}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{blindtext}
+\usepackage{tikz-cd}
+\usepackage{ifthen}
+\usepackage[top=1.2in, bottom=1.5in, left=1in, right=1in]{geometry}
+
+% the 'listings' package allows to embed entire .py files into TeX. 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{%
+    frame=tb,
+    language=Python,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    backgroundcolor=\color{light-gray},
+    numbers=left,
+    stepnumber=1,
+    numberfirstline=true,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    xleftmargin=0.25in,
+    xrightmargin=0.25in
+}
+
+
+\restylefloat{table}
+
+\DeclareMathSizes{12}{14}{12}{8}
+
+\DeclareMathOperator*{\dom}{dom}
+\DeclareMathOperator*{\Aut}{Aut}
+\DeclareMathOperator*{\Tor}{Tor}
+\DeclareMathOperator*{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator*{\End}{End}
+
+\newcommand{\BB}{\mathbb{B}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\on}{\operatorname}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\ul}{\underline}
+\newcommand{\ol}{\overline}
+\newcommand{\so}{\mathfrak{so}}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\li}{\liminf}
+\newcommand{\ls}{\limsup}
+\newcommand{\ran}{\rangle}
+\newcommand{\lan}{\langle}
+
+\newenvironment{poof}{
+                    \begin{addmargin}[2.5em]{1em} \textit{Proof.}
+                    }
+                    {
+                    \hfill $\qed$\end{addmargin}
+                    } %meant to be used inside the `claim' environment.
+
+
+\newtheorem*{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem*{problem}{Problem}
+\theoremstyle{remark}\newtheorem{claim}{Claim}
+\theoremstyle{remark}\newtheorem*{sol}{Solution}
+
+\title{Math 127: Assignment 2}
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lhead{\ifthenelse{\value{page}=1}{\bfseries}{Bidit Acharya, Tracy Lou, Joshua P. Nixon, Alex Pearson}}
+\rhead{\ifthenelse{\value{page}=1}{\bfseries}{Math 127 Assignment 2}}
+
+%=========document starts here=========
+\begin{document}
+
+\begin{center} {\Large \bf MATH 127: Computational Biology Spring 2016 } \\
+                [8pt]{Assignment 2\\ [8pt]}\end{center}
+                
+                \begin{center} \textbf{Group 6}\\ Bidit Acharya, Tracy Lou, Josh Nixon, Alex Pearson
+                \end{center}
+                
+%====================project outline============
+\section{Project Outline}
+
+This project investigates many mathematical and computational techniques used in modeling the evolutionary relationships between different species and viruses such as HIV. The models we are comparing use algorithms from UPGMA, parsimony, and from Kimura-2 and Kimura-3. We wrote code for these models in order to compare their accuracy to the real phylogenetic tree with the Jukes- Cantor model.
+
+In order to measure accuracy, libraries for Python such as NumPy and \textbf{matplotlib} were used. We used NumPy mainly to compute matrices and \textbf{matplotlib} to graph histograms to compare distribution of distances. 
+
+
+
+
+%=================problems==================
+\section{Problems}
+
+\begin{problem}[4.5.12] 
+The Jukes-Cantor distance is an estimate of the number of mutations that occurred per site over the course of one sequence evolving from another. A simpler estimate for this number is just \textit{p}, the proportion of sites that have changed from the initial to final sequence.
+\end{problem}
+\begin{enumerate}[a.]
+
+\item Explain why multiple mutations at the same site would cause \textit{p} to be less reliable. Does it give an overestimate or underestimate of the true amount of mutation?
+\begin{sol} \textit{p} is less reliable, because more mutations at the same site means there's a larger possibility for hidden mutations we won't be able to detect, especially if they are reversed. Thus, this gives an underestimate of the true amount of mutation.
+\end{sol}
+
+\item Give an intuitive explanation of why, if \textit{p} is relatively small, so that the sequences have few differences, this simpler estimate might be reasonable anyway.
+\begin{sol}
+If \textit{p} is small, then this implies there were few mutations at that specific site, and thus less hidden mutations. If there are less hidden mutations, then the estimate would be pretty reasonable.
+\end{sol}
+
+\item Explain why part (b) is consistent with the Jukes-Cantor model. That is, explain why for small \textit{p}.
+\begin{equation*}
+\frac{3}{4} \ln (1-\frac{4}{3}p) \approx p
+\end{equation*}
+
+\begin{sol}
+For small \textit{p}, the equation holds for mutations converging to a stable distribution of base pairs which is consistent with the Jukes- Cantor model.
+\end{sol}
+
+\item It has been claimed that, if \textit{p} is less than .1, it can be used as a reasonable approximation of the Jukes-Cantor distance. Do you agree? Illustrate by graphing both \begin{math} d = \frac{-3}{4}\ln (1- \frac{4}{3}p)\end{math} and \textit{d}=\textit{p} for \begin{math} 0\leq p<  3/4. \end{math}
+
+\begin{sol}
+\end{sol}
+
+\end{enumerate}
+\end{document}
