@@ -119,7 +119,7 @@
 %====================project outline============
 \section{Project Outline: A Comparison of Phylogenetic Inference Algorithms and Distance Methods}
 
-\par This project investigates a few of the many mathematical and computational techniques used to model evolution between different species. The algorithms compared were \textbf{UPGMA (Unweighted Pair Group Method with Arithmetic Mean)} and \textbf{Neighbor-Joining}. Further, these phylogenetic inference algorithms yielded trees according to evolution simulated by these three different distance methods: the \textbf{Jukes-Cantor}, \textbf{Kimura-2}, and \textbf{Kimura-3} Markov models (Markov models are models  with the property that changes imposed on the future state of the system is dependent on only present state and not the many previous states before). Once possible trees were drawn, we advanced our model by using the \textbf{traditional parsimony} algorithm to calculate the parsimony cost of each given tree that was computed. By implementing a wide range of different distance methods and inference algorithms, our results can be applied towards practical biological problems such as determining if a dentist infected his patients with HIV; or towards more general problems such as understanding the role and possible progression (or reduction) of noncoding DNA within differing species' genomes over time. In addition to the biological applications, this project explored the refinement of the phylogenetic inference algorithms and distance methods through demonstration and discussion of the striking differences between the results acquired.
+\par This project investigates a few of the many mathematical and computational techniques used to model evolution between different species. The algorithms compared were \textbf{UPGMA (Unweighted Pair Group Method with Arithmetic Mean)} and \textbf{Neighbor-Joining}. Further, these phylogenetic inference algorithms yielded trees according to evolution simulated by these three different distance methods: the \textbf{Jukes-Cantor}, \textbf{Kimura-2}, and \textbf{Kimura-3} Markov models (Markov models are models  with the property that changes imposed on the future state of the system is dependent on only present state and not the many previous states before). Once possible trees were drawn, we advanced our model further by using the \textbf{traditional parsimony} algorithm to compare the parsimony cost of each given tree that was computed. By implementing a wide range of different distance methods and inference algorithms, our results can be applied towards practical biological problems such as determining if a dentist infected his patients with HIV; or towards more general problems such as understanding the role and possible progression (or reduction) of noncoding DNA within differing species' genomes over time. In addition to the biological applications, this project explored the refinement of the phylogenetic inference algorithms and distance methods through demonstration and discussion of the striking differences between the results acquired.
 
 \par To begin, evolution was simulated using a function, \texttt{mutate (A, t, seq)}, on sample DNA sequences. This function "mutated" the aforementioned sequence according to time and the individual parameters given by each distance method. For instance, when using the function \texttt{mutate()} to simulate evolution according to the Jukes-Cantor model, Jukes-Cantor distances between the ancestor and progeny sequences were computed and compared to the genuine distances for accuracy. Once these distances were calculated, phylogenetic inference algorithms, such as the neighbor-joining algorithm, were implemented to produce phylogenetic trees. These trees, like the distances, were then compared to the proven, legitimate tree. This was extended by simulating evolution according to the different distance methods and then implementing the two inference algorithms on both to get the best tree.
 
@@ -127,8 +127,14 @@
 
 \par Unlike the Jukes-Cantor model, the \textbf{Kimura} models consider more than one parameter to compute the distances between ancestor and progeny DNA sequences. In addition to mutation rates, the \textbf{Kimura-2} model incorporates different rates of transitions, $\beta$, (e.g.purine $\longleftrightarrow$ purine) and different rates of transversions, $\gamma$ (e.g.purine $\longleftrightarrow$ pyrimidine). Biologically, there are two types of transversions: an exchange between one-ring and two-ring structures.The \textbf{Kimura-3} takes this into account by considering a third parameter, $\delta$, for the rates of two-ring transversions. Distances between initial and final sequences were compared using both models that were used in the phylogenetic inference algorithms.
 
-\par The next area of adjustment is based upon the difference between two phylogenetic inference algorithms: Neighbor-Joining and UPGMA. 
+\par The next area of adjustment is based upon the difference between two phylogenetic inference algorithms: Neighbor-Joining and UPGMA. Between the two, \textbf{UPGMA} is the much simpler one since it makes more assumptions, such as \textit{molecular clock} assumption. UPGMA begins by using the calculated Jukes-Cantor distances--or the distance from the Kimura-2 and Kimura-3 model--and joining the closest pair of taxa, presuming that the two closest taxa should be neighbors. In order to start building metric trees, each edge of the tree from which the temporary root was created is assumed to be weighted equally. This harks back at \textit{molecular clock} assumption of having a constant mutation rate $\alpha$.  Essentially, UPGMA takes the average Jukes-Cantor distance between two sequences, creates a temporary root that is then collapsed and used to compute the average Jukes-Cantor distance between that new, collapsed temporary root and another sequence. This is repeated until all sequences have neighbors. These simplifying instructions, like the Jukes-Cantor model, allows basic models to be created and make simple predictions of the evolutionary relationships between the different species.
 
+\par Despite the simplicity of the UPGMA algorithm, it fails when $\alpha$ is not constant and by necessitating that species with the smallest Jukes-Cantor distance (or any other distance method distances) are neighbors. This is not guaranteed. Hence, the \textbf{Neighbor-Joining} algorithm is implemented, since it has the criterion that the leaves of a rooted vertex guarantees that those two species are neighbors.
+
+
+\par math stuff
+
+\par results
 
 %=================problems, 5.1.3==================
 \section{Problems}
@@ -137,12 +143,14 @@
 \end{problem}
 \begin{enumerate}[a.]
 
-\item 
+\item Draw all 3 topologically distinct unrooted bifurcating trees that could describe the relationship between 4 taxa.
 \begin{sol} 
+See attached .pdf file with images of drawn trees. 
 \end{sol}
 
-\item 
+\item Draw all 15 topologically distinct unrooted bifurcating trees that could describe the relationship between 4 taxa.
 \begin{sol}
+See attached .pdf file with images of drawn trees.
 \end{sol}
 
 
@@ -150,6 +158,9 @@
 
 %==============5.1.7===================================
 \begin{problem}[5.1.7] 
+Because mitochondrial DNA in humans is inherited solely from the mother, it can be used to construct a tree relating any number of humans from different ethnic groups, assuming we all descended from a single first human female. Depending on the clustering pattern of the ethnic groups, this might give insight into the physical location of this woman sometimes called Mitochondrial Eve.
+
+In (Cann et al., 1987), a work that first purported to locate Mitochondrial Eve in Africa, supporting the ?out of Africa? theory of human origins, a rooted tree was constructed that was claimed to show the relationships between 147 individuals. How many topologically different trees would need to be looked at if every possibility was really examined? (Use Stirling's formula for the approximation of $n!$)
 \end{problem}
 
 \begin{sol}
