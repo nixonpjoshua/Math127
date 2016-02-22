@@ -18,7 +18,9 @@ def closest_neighbors(M):
                 min = M[i,j]
                 coordinates = (i,j)
     return coordinates
-
+"""
+please note that taxa1 must be less than taxa2 numerically
+"""
 def update_UPGMA_matrix(M, taxa1, taxa2):
         size  = len(M)
         new_size = size - 1
