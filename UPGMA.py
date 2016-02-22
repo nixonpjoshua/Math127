@@ -163,7 +163,7 @@ def UPGMA(M, names):
             t.add_child(B)
             trees.remove(B)
         #delete old taxa names and update the new name
-        new_names = [name[taxa1] + names[taxa2]]
+        new_names = [names[taxa1] + names[taxa2]]
         del names[taxa2]
         del names[taxa1]
         [new_names.append(name) for name in names]
