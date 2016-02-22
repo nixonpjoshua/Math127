@@ -56,10 +56,6 @@ Returns:
 """
 
 def UPGMA(M, names):
-    """
-    >>> UPGMA(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
-    np.array([[0, .425, .575],[0,    0,  .50],[0,    0,    0]])
-    """
     def search_nodes(trees ,name):
         for tree in trees:
             if tree.name == name:
@@ -105,14 +101,6 @@ def UPGMA(M, names):
             break
         M = update_UPGMA_matrix(M, taxa1, taxa2)
     return trees[0]
-
-"""
-Work-Horse function of UPGMA Algorithm, that given an array of sequences
-returns a phylogenetic tree of distances represented as a list of lists
-"""
-
-def JC_UPGMA(M):
-    return "Need to implement this function"
 
 
 
