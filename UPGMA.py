@@ -84,100 +84,57 @@ def JC_distance(s1,s2):
     prop_diff = prop_diff(s1,s2)
     return 1 - (np.log(1 - 4/3*prop_diff))
 
-"""
-Computes the index of the minimum distance in distance matrix.
-Args:
-    M: distance matrix
-Returns:
-    index of the minimum entry of the Matrix
-"""
-def find_min(M):
-    """
-    >>> find_min(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
-    2
-    """
-    upr   = M.shape[0]*M.shape[1]
-    small = 99 # Dummy value. Distances must always be < 1
-    index = 0
-    i     = 0
-    while i < upr:
-        if (M.item(i) < small) and (M.item(i) != 0):
-            small = M.item(i) 
-            index = i
-        i += 1
-    return index
+
+def closest_neighbors(M):
+    size = len(M)
+    min = 100000
+    coordinates = (0,0)
+    for i in xrange(size-1):
+        for j in xrange(i + 1, size):
+            if M[i,j] <= min:
+                min = M[i,j]
+                coordinates = (i,j)
+    return coordinates
+
 
 """
-Computes the column number of the nearest neighbor of the matrix  
+Computes the subsequent Distance Matrix of the UPGMA algorithm
 Args:
-    nearest:  index of the smallest distance in the matrix
-    num_cols: number of columns in the array
+    M: the transition Matrix for the Jukes Cantor Algorithm
 Returns:
     subsequent matrix using UPGMA
 """
 
-def get_row(M):
-	"""
-	>>> get_row(A)
-	1.0
-	"""
-	nearest  = find_min(M)
-	row_size = M.shape[1]
-	ans      = math.floor(nearest/row_size)
-	return ans
-
-"""
-Computes the column number of the nearest neighbor of the matrix  
-Args:
-    nearest:  index of the smallest distance in the matrix
-    num_cols: number of columns in the array
-Returns:
-    subsequent matrix using UPGMA
-"""
-
-def get_col(M):
-	"""
-	>>> get_col(A)
-	2
-	"""
-	num_cols = M.shape[1]
-	nearest  = find_min(M)
-	col_num  = nearest % num_cols
-	return  col_num
-
-"""
-Computes the subsequent Distance Matrix of the UPGMA algorithm 
-Args:
-    M: the transition Matrix for the Jukes Cantor Algorithm 
-Returns:
-    subsequent matrix using UPGMA
-"""
-
-def new_dist(M):
+def UPGMA(M):
     """
-    >>> new_dist(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
+    >>> UPGMA(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
     np.array([[0, .425, .575],[0,    0,  .50],[0,    0,    0]])
     """
-    min_row   = get_row(M)       # equiv. to  species 1
-    min_col   = get_col(M)       # equiv. to  species 2
-    num_rows  = M.shape[0] 
-    num_cols  = M.shape[1]
-    new_spec  = min(min_row,min_col)
-    ans       = np.zeros((num_rows - 1, num_cols - 1))
-    
-    # will use new spec as the row of my "new species" in the new matrix
+    taxa1, taxa2 = closest_neighbors(M)
+    size  = len(M)
+    new_size = size - 1
+    ans       = np.zeros((new_size, new_size))
 
-    for i in xrange(num_rows):
-    	for j in xrange(num_cols):
-    		if i >= j: #only analyzing upper triangle of entries
-    			pass
-    		elif i == min_row and j == min_col:
-    			pass
-    		else:
-    			ans[i][j] = (M[][] + M[][])/2
-    		else:
-    			ans[i][j] = M[i][j]
-  
+    # will use the 0th row and column for the new species in the matrix
+    #
+    # copies over the vales from the old matrix
+    computed_col = 1
+    new_row = 1
+    for i in xrange(size - 1):
+        if i != taxa1 and i != taxa2:
+            new_col = new_row + 1
+    	    for j in xrange(i + 1, size):
+               if j != taxa1 and j != taxa2:
+                   ans[new_row,new_col] = M[i,j]
+                   new_col += 1
+            new_row +=1
+    # compute the first row of entries
+    new_col = 1
+    for j in xrange(size):
+        if j != taxa1 and j != taxa2:
+            #exploits the fact that we have an upper triangular so col > row always
+            ans[0,new_col] = (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)]) / 2
+            new_col += 1
     return ans
 
 """
