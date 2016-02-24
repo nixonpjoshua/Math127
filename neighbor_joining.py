@@ -18,16 +18,27 @@ def sums_others(M):
                 s+= M[min(other, i), max(other, i)]
         sums[i] = s
     return sums
+
 """
-returns the Q-matrix of matrix M (first step in neighbor joining)
+Makes Q matrix that decides what will be joined 
+Args:
+    M: symetric matrix
+Returns:
+    Q matrix
 """
-def q_matrix(M, i_sum, j_sum):
-    size = len(M)
-    sums = sums_others(M)
-    Q = np.zeros(size, size)
-    for i in xrange(size):
-        for j in xrange(size):
-            Q[i,j] = (size - 2)*M[i,j] - sums[i] - sums[j]
+
+def make_Q_matrix(M):
+    N  = M.shape[0]        # number of taxa
+    Q  = np.zeros(M.shape) # matrix to be returned 
+    for i in xrange(N):
+        for j in xrange(N):
+            if i < j:
+                Q[i][j] = (N-2)*M[i][j]
+                # sums others
+                for k in xrange(N):
+                        Q[i][j] = Q[i][j] - M[i][k] - M[j][k]
+            else:
+                pass
     return Q
 
 """

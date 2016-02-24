@@ -8,6 +8,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from UPGMA import *
 from ete3 import Tree
 
 """
@@ -25,6 +26,7 @@ def make_Q_matrix(M):
 		for j in xrange(N):
 			if i < j:
 				Q[i][j] = (N-2)*M[i][j]
+				# sums others
 				for k in xrange(N):
 						Q[i][j] = Q[i][j] - M[i][k] - M[j][k]
 			else:
@@ -42,3 +44,27 @@ print a
 print make_Q_matrix(a)
 
 
+def sums_others(M):
+    size = len(M)
+    sums = np.zeros(size)
+    for i in xrange(size):
+        s = 0
+        for other in xrange(size):
+            if other != i:
+                s+= M[min(other, i), max(other, i)]
+        sums[i] = s
+    return sums
+"""
+returns the Q-matrix of matrix M (first step in neighbor joining)
+"""
+def q_matrix(M):
+    size = len(M)
+    sums = sums_others(M)
+    Q = np.zeros(size, size)
+    for i in xrange(size):
+        for j in xrange(size):
+            Q[i,j] = (size - 2)*M[i,j] - sums[i] - sums[j]
+    return Q
+
+
+print q_matrix(a)
