@@ -36,7 +36,8 @@ Args:
 Returns:
     Q matrix
 """
-def make_Q_matrix(M, sums):
+def make_Q_matrix(M):
+    sums = sums_others(M)
     N  = M.shape[0]        # number of taxa
     Q  = np.zeros(M.shape) # matrix to be returned 
     for i in xrange(N):
@@ -95,7 +96,7 @@ def update_matrix(M, taxa1, taxa2, new_dist_fn):
                 new_col += 1
         return ans
 
-def neighbor_based_method(M, names, closest_neighbors_fn new_dist_fn, parent_dist_fn):
+def neighbor_based_method(M, names, closest_neighbors_fn, new_dist_fn, parent_dist_fn):
     def search_nodes(trees ,name):
         for tree in trees:
             if tree.name == name:
@@ -141,7 +142,7 @@ def neighbor_based_method(M, names, closest_neighbors_fn new_dist_fn, parent_dis
     return trees[0]
 
 def UPGMA(M, names):
-    return neighbor_based_method(M, names, closest_neighbors UPGMA_new_dist, split_dist)
+    return neighbor_based_method(M, names, closest_neighbors, UPGMA_new_dist, split_dist)
 
 def neighbor_joining(M, names):
     return neighbor_based_method(M, names, lambda m : closest_neighbors(make_Q_matrix(m)), neighbor_joining_new_dist, neighbor_joining_parent_dist)
