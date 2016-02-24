@@ -26,7 +26,14 @@ Args:
 Returns:
     subsequent matrix using UPGMA
 """
-def update_matrix(M, taxa1, taxa2):
+def UPGMA_new_dist(M, taxa1, taxa2, i, j):
+    return (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)]) / 2
+
+def split_dist(M, taxa1, taxa2):
+    avg_dist = M[taxa1, taxa2]/2
+    return (avg_dist, avg_dist)
+
+def update_matrix(M, taxa1, taxa2, new_dist_fn):
         size  = len(M)
         new_size = size - 1
         ans       = np.zeros((new_size, new_size))
@@ -48,11 +55,11 @@ def update_matrix(M, taxa1, taxa2):
         for j in xrange(size):
             if j != taxa1 and j != taxa2:
                 #exploits the fact that we have an upper triangular so col > row always
-                ans[0,new_col] = (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)]) / 2
+                ans[0,new_col] = UPGMA_new_dist(M, taxa1, taxa2, i, j)
                 new_col += 1
         return ans
 
-def UPGMA(M, names):
+def neighbor_based_method(M, names, new_dist_fn, parent_dist_fn):
     """
     >>> UPGMA(np.array([[0, .45, .27, .53],[0,   0, .40, .50],[0,   0,   0, .62],[0,   0,   0,  0]]))
     np.array([[0, .425, .575],[0,    0,  .50],[0,    0,    0]])
@@ -90,9 +97,7 @@ def UPGMA(M, names):
         [new_names.append(name) for name in names]
         names = new_names
         #create the distance between children and parent
-        avg_dist = M[taxa1, taxa2]/2
-        A.dist = avg_dist
-        B.dist = avg_dist
+        A.dist, B.dist = parent_dist_fn(M, taxa1, taxa2)
         #name the parent
         t.name = names[0]
         #add the new subtree
@@ -100,16 +105,11 @@ def UPGMA(M, names):
 
         if len(M) <= 2:
             break
-        M = update_matrix(M, taxa1, taxa2)
+        M = update_matrix(M, taxa1, taxa2, new_dist_fn)
     return trees[0]
 
-"""
-Work-Horse function of UPGMA Algorithm, that given an array of sequences
-returns a phylogenetic tree of distances represented as a list of lists
-"""
-
-def JC_UPGMA(M):
-    return "Need to implement this function"
+def UPGMA(M, names):
+    return neighbor_based_method(M, names, UPGMA_new_dist, avg)
 
 
 
