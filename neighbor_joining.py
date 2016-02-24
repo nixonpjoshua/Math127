@@ -8,14 +8,24 @@
 import numpy as np
 from ete3 import Tree
 
+def closest_neighbors(M):
+    size = len(M)
+    min = 100000
+    coordinates = (0,0)
+    for i in xrange(size-1):
+        for j in xrange(i + 1, size):
+            if M[i,j] <= min:
+                min = M[i,j]
+                coordinates = (i,j)
+    return coordinates
+
 def sums_others(M):
     size = len(M)
     sums = np.zeros(size)
     for i in xrange(size):
         s = 0
         for other in xrange(size):
-            if other != i:
-                s+= M[min(other, i), max(other, i)]
+            s += M[min(other, i), max(other, i)]
         sums[i] = s
     return sums
 
@@ -26,25 +36,20 @@ Args:
 Returns:
     Q matrix
 """
-
 def make_Q_matrix(M):
+    sums = sums_others(M)
     N  = M.shape[0]        # number of taxa
     Q  = np.zeros(M.shape) # matrix to be returned 
     for i in xrange(N):
         for j in xrange(N):
             if i < j:
-                Q[i][j] = (N-2)*M[i][j]
-                # sums others
-                for k in xrange(N):
-                        Q[i][j] = Q[i][j] - M[i][k] - M[j][k]
-            else:
-                pass
+                Q[i][j] = (N-2)*M[i][j] - sums[i] - sums[j]
     return Q
 
 """
 please note that taxa1 must be less than taxa2 numerically
 """
-def update_Q_matrix(M, taxa1, taxa2):
+def update_matrix(M, taxa1, taxa2):
         size  = len(M)
         new_size = size - 1
         ans       = np.zeros((new_size, new_size))
@@ -70,17 +75,6 @@ def update_Q_matrix(M, taxa1, taxa2):
                 ans[0,new_col] = (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)] - M[taxa1,taxa2]) / 2
                 new_col += 1
         return ans
-        
-def closest_neighbors(M):
-    size = len(M)
-    min = 100000
-    coordinates = (0,0)
-    for i in xrange(size-1):
-        for j in xrange(i + 1, size):
-            if M[i,j] <= min:
-                min = M[i,j]
-                coordinates = (i,j)
-    return coordinates
         
 def UPGMA(M, names):
     def search_nodes(trees ,name):
