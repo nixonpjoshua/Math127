@@ -6,8 +6,16 @@
 #          Tracy Lou
 
 import numpy as np
+import sys 
 from ete3 import Tree
 
+"""
+Computes a list whose ith entry is the distance from taxa i to all of the other taxa in the distance matrix
+Args:
+    M: Upper triangular distance matrix
+Returns:
+    "sums" which is a list whose ith entry is the distance from taxa i to all of the other taxa in the distance matrix
+"""
 def sums_others(M):
     size = len(M)
     sums = np.zeros(size)
@@ -18,9 +26,16 @@ def sums_others(M):
         sums[i] = s
     return sums
 
+"""
+Computes a tuple of "coordinates" whose entries i and j correspond to the numbers of the two taxa that are to be joined
+Args:
+    M: Criterion matrix could be Q matrix or just a distance matrix
+Returns:
+    "coordinates" whose entries i and j correspond to the numbers of the two taxa that are to be joined
+"""
 def closest_neighbors(M):
     size = len(M)
-    min = 100000
+    min = sys.maxint
     coordinates = (0,0)
     for i in xrange(size-1):
         for j in xrange(i + 1, size):
@@ -32,7 +47,7 @@ def closest_neighbors(M):
 """
 Makes Q matrix that decides what will be joined 
 Args:
-    M: symetric matrix
+    M: Upper triangular matrix
 Returns:
     Q matrix
 """
@@ -47,18 +62,39 @@ def make_Q_matrix(M):
     return Q
 
 """
-Computes the subsequent Distance Matrix of the UPGMA algorithm
+Computes the subsequent Distance Entry of the UPGMA algorithm
 Args:
-    M: the transition Matrix for the Jukes Cantor Algorithm
+    M:     the transition Matrix for the Jukes Cantor Algorithm
+    taxa1: taxa that was combined 
+    taxa2: taxa that was combined 
+    j:     taxa that we want to find distance to new node 
 Returns:
-    subsequent matrix using UPGMA
+    new distance using from j to cherry
 """
 def UPGMA_new_dist(M, taxa1, taxa2, j):
     return (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)]) / 2
 
+"""
+Computes the subsequent Distance Entry of the NJ algorithm
+Args:
+    M:     the old distance matr
+    taxa1: taxa that was combined 
+    taxa2: taxa that was combined 
+    j:     taxa that we want to find distance to new node 
+Returns:
+    new distance using from j to cherry
+"""
 def neighbor_joining_new_dist(M, taxa1, taxa2, j):
     return (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)] - M[taxa1, taxa2])/2.0
-
+    
+"""
+Takes arithmetic meean of distance from s1 and s2 
+    M:     the old distance matr
+    taxa1: taxa that was combined 
+    taxa2: taxa that was combined 
+Returns:
+    tuple of size 2 entries containing arithmetic mean of taxa1 and taxa2
+"""
 def split_dist(M, taxa1, taxa2):
     avg_dist = M[taxa1, taxa2]/2
     return (avg_dist, avg_dist)
@@ -69,7 +105,16 @@ def neighbor_joining_parent_dist(M, taxa1, taxa2):
     taxa1_dist = M[taxa1, taxa2]/2.0 + (sums[taxa1] - sums[taxa2])/(2*(len(M)-2))
     return (taxa1_dist, M[taxa1, taxa2] - taxa1_dist)
     
-
+"""
+Updates Distance Matrix A reflecting the joining of taxa1 and taxa2
+Args:
+    M:           the old distance matrix
+    taxa1:       taxa that was combined 
+    taxa2:       taxa that was combined 
+    new_dist_fn: function that determines how we compute new distances for our distance matrix 
+Returns:
+    new distance matrix
+"""
 def update_matrix(M, taxa1, taxa2, new_dist_fn):
         size  = len(M)
         new_size = size - 1
@@ -87,12 +132,13 @@ def update_matrix(M, taxa1, taxa2, new_dist_fn):
                        ans[new_row,new_col] = M[i,j]
                        new_col += 1
                 new_row +=1
+        
         # compute the first row of entries
         new_col = 1
         for j in xrange(size):
             if j != taxa1 and j != taxa2:
                 #exploits the fact that we have an upper triangular so col > row always
-                ans[0,new_col] = UPGMA_new_dist(M, taxa1, taxa2, j)
+                ans[0,new_col] = new_dist_fn(M, taxa1, taxa2, j)
                 new_col += 1
         return ans
 
