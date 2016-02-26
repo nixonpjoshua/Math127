@@ -1,4 +1,4 @@
-# Group 6: UPGMA Algorithm using Jukes Cantor Distance
+# Group 6: Distance based tree methods 
 
 # Authors: Josh Nixon
 #          Alex Pearson
@@ -88,7 +88,7 @@ def neighbor_joining_new_dist(M, taxa1, taxa2, j):
     return (M[min(taxa1, j), max(taxa1, j)] + M[min(taxa2, j), max(taxa2, j)] - M[taxa1, taxa2])/2.0
     
 """
-Takes arithmetic meean of distance from s1 and s2 
+Variety of parents_dist_functions that makes molecular clock assumption and uses arithmetic mean for edge distances from MRCA
     M:     the old distance matr
     taxa1: taxa that was combined 
     taxa2: taxa that was combined 
@@ -98,6 +98,15 @@ Returns:
 def split_dist(M, taxa1, taxa2):
     avg_dist = M[taxa1, taxa2]/2
     return (avg_dist, avg_dist)
+
+"""
+Variety of parents_dist_functions that uses 4 point condition to create edge distances from MRCA
+    M:     the old distance matr
+    taxa1: taxa that was combined 
+    taxa2: taxa that was combined 
+Returns:
+    tuple of size 2 entries containing arithmetic mean of taxa1 and taxa2
+"""
 
 # TODO this means we compute sums others twice per loop
 def neighbor_joining_parent_dist(M, taxa1, taxa2):
@@ -141,6 +150,17 @@ def update_matrix(M, taxa1, taxa2, new_dist_fn):
                 ans[0,new_col] = new_dist_fn(M, taxa1, taxa2, j)
                 new_col += 1
         return ans
+
+"""
+Work horse function of the distance based methods file. 
+Args:
+    M:           the old distance matrix
+    taxa1:       taxa that was combined 
+    taxa2:       taxa that was combined 
+    new_dist_fn: function that determines how we compute new distances for our distance matrix 
+Returns:
+    new distance matrix
+"""
 
 def neighbor_based_method(M, names, closest_neighbors_fn, new_dist_fn, parent_dist_fn):
     def search_nodes(trees ,name):
@@ -187,9 +207,26 @@ def neighbor_based_method(M, names, closest_neighbors_fn, new_dist_fn, parent_di
         M = update_matrix(M, taxa1, taxa2, new_dist_fn)
     return trees[0]
 
+"""
+Runs the UPGMA algorithm by calling neighbhor_based_method thus outputting a tree
+Args:
+    M:     the old distance matrix
+    names: list of the names of all the sequences 
+Returns:
+    Tree gennerated according to the UPGMA algorithm
+
+"""
 def UPGMA(M, names):
     return neighbor_based_method(M, names, closest_neighbors, UPGMA_new_dist, split_dist)
 
+"""
+Runs the neighbhor_joining algorithm by calling neighbhor_based_method thus outputting a tree
+Args:
+    M:     the old distance matrix
+    names: list of the names of all the sequences 
+Returns:
+    Tree gennerated according to the neighbhoor joining algorithm
+"""
 def neighbor_joining(M, names):
     return neighbor_based_method(M, names, lambda m : closest_neighbors(make_Q_matrix(m)), neighbor_joining_new_dist, neighbor_joining_parent_dist)
 
