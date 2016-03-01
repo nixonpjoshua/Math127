@@ -81,11 +81,11 @@ def mutate(a, t, seq):
     M = LA.matrix_power(M, t)
     tokens = list(seq)
     for i in xrange(len(tokens)):
-        p                       = np.zeros(4)
-        p[DNA_to_position(tokens[0])] = 1
-        p                       = np.dot(M,p)
+        p = np.zeros(4)
+        p[DNA_to_position(tokens[1])] = 1
+        p = np.dot(M,p)
 
-        rand                    = np.random.rand()
+        rand= np.random.rand()
         if rand < p[0]:
             val = 'A'
         elif rand < p[0]+p[1]:
