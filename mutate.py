@@ -118,4 +118,18 @@ def tree_simulator(a, t, seq):
                 break
         return t
     return tree_helper(0, seq)
-    
+
+def evolution_simulator(a, sim_time, timestep, seq, selectionFn, expansion_factor):
+    t = Tree(name= seq)
+    def tree_helper(curr_time, node):
+        if curr_time >= sim_time - timestep:
+            return
+        pop = [node.name]*expansion_factor
+        pop.map(lambda x: mutate(a, timestep, x))
+        pop = selectionFn(pop)
+        for taxa in pop:
+            new_node = node.add_child(name = taxa)
+            new_node.dist = timestep
+            tree_helper(curr_time+t, new_node)
+    tree_helper(0, t)
+    return t
