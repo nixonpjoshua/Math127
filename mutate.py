@@ -135,6 +135,7 @@ def evolution_simulator(a, sim_time, timestep, seq, selectionFn, expansion_facto
             tree_helper(curr_time+timestep, new_node)
     tree_helper(0, t)
     return t
-
+def simple_killing(pop):
+    return filter(lambda y: np.random.rand() > .4, pop)
 print('tree sim')
-print(evolution_simulator(.1, 100, 10, 'GATTACA', lambda x: x, 2))
+print(evolution_simulator(.1, 100, 10, 'GATTACA', simple_killing, 2))
