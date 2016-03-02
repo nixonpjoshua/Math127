@@ -6,7 +6,7 @@
 #          Tracy Lou
 
 import numpy as np
-import from ete3 Tree
+from ete3 import Tree
 from numpy import linalg as LA
 
 """
@@ -97,8 +97,10 @@ def mutate(a, t, seq):
         tokens[i] = val
     return ''.join(tokens)
 
-print(mut(.3,4,'GATTACA'))
-
+print(mutate(.3,4,'GATTACA'))
+"""
+The origonal idea for evolution of a sequence, creates a bifrucating tree which is fully bushy and has many nodes...
+"""
 def tree_simulator(a, t, seq):
     def tree_helper(elapsed, seq):
         t = Tree(name = seq)
@@ -125,11 +127,14 @@ def evolution_simulator(a, sim_time, timestep, seq, selectionFn, expansion_facto
         if curr_time >= sim_time - timestep:
             return
         pop = [node.name]*expansion_factor
-        pop.map(lambda x: mutate(a, timestep, x))
+        pop = map(lambda x: mutate(a, timestep, x), pop)
         pop = selectionFn(pop)
         for taxa in pop:
             new_node = node.add_child(name = taxa)
             new_node.dist = timestep
-            tree_helper(curr_time+t, new_node)
+            tree_helper(curr_time+timestep, new_node)
     tree_helper(0, t)
     return t
+
+print('tree sim')
+print(evolution_simulator(.1, 100, 10, 'GATTACA', lambda x: x, 2))
