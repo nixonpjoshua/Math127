@@ -5,18 +5,52 @@ from mutate import *
 
 hiv_data = loadmat('flhivdata.mat')
 
+#UNUSED Data
+ptb4 ='ataagacaagcacattgtaacattagtggagcaaaatggaataatactatagaacaggta'
+ptb5 ='aagacaaaattaagagaacaatttgggaataaaacaataatctttaatcactcctcagga'
+ptb6 ='ggggacccagaaattgtaatgcacagttttaattgtggagggg'
+
 
 print(hiv_data.keys())
 
-# print(hiv_data["lc5"])
+## Truncated data from new Matlab File  Prof. Dynerman Sentus
 
-# print(hiv_data["lc1"])
+d0   ='ctagcagaagaagaggtagtaattagatctgccaatttcacagacaatgctaaaatcata'
+d1   ='cccaacaacaatacaagaaaaggtatacatataggaccagggagagcattttatgcaaca'
+d2   ='agtagagaaaaatggaataatactttaaaccaggtagttacagaattaagggaacaattt'
 
-# print(hiv_data["__globals__"])
+ptb1 ='ctagcagaagaagagatagtaattagatctgccaatttcacagacaatgctaaaatcata'
+ptb2 ='atagtacagctgaatgcatctgtagaaattaattgtacaagacccgacaacaatacaaga'
+ptb3 ='aaaggtatacatataggaccagggagggcattttatgcaacaggagaaataataggagat'
+
+ptc1 ='ctagcagaagaagaggtagtaattagatctgccgatttcacagacaatgctaaaatcata'
+ptc2 ='aagaaaaggtatacatataggaccagggagagcagtttatgcaacagacagaataatagg'
+ptc3 ='tagttacaaaattaagagaacaatttgtgaataaaacaataatctttactcacccctcag'
+
+ptd1 ='ctagcagaagaagaggtagtaattagatctgcaaatttctcggacaatgctaaaaccata'
+ptd2 ='caataatacaagacaaagtatacctataggaccagggaaagcagtttatgcaacaggaca'
+ptd3 ='taaaagaacaatttaagaataaaacaatagtcttcaatcaatcctcaggaggggacccag'
+
+lc1a ='ctagcagaagaagaagtagtaattagatctgaaaatttcacgaataatgctaaaatcata'
+lc1b ='agtatacctatgggaccagggaaagcattttatacaacagaaataataggaaatataaga'
+lc1c ='gagaacaatttaagaataaaacaatagtcttcaatcactcctcaggaggggacccagaaa'
+
+## Patients 
+
+ptb = [ptb1, ptb2, ptb3] 
+ptc = [ptc1, ptc2, ptc3]
+ptd = [ptd1, ptd2, ptd3]
 
 
-# print('tree sim')
-# print(evolution_simulator(.1, 1000, 10, 'GATTACA', simple_killing, 2))
+## Dentist
+
+dnt  = [d0, d1,  d2]
+
+## Control 
+
+ctl = [lc1a, lc1b, lc1c]
+
+
 
 
 
