@@ -121,21 +121,42 @@ def tree_simulator(a, t, seq):
         return t
     return tree_helper(0, seq)
 
+"""
+Simulates Evolution of a DNA sequence with 
+    a                : alpha level (mutation rate)
+    sim_time         : total time simulating
+    timestep         : timestep
+    seq              : original input seqeuence
+    selectionFn      : Decides who survives from population
+    expansion_factor : multiplication factor that determines number of seqs in the population. pop_size_n = 2*pop_size_n-1
+"""
+
 def evolution_simulator(a, sim_time, timestep, seq, selectionFn, expansion_factor):
     t = Tree(name= seq)
     def tree_helper(curr_time, node):
         if curr_time >= sim_time - timestep:
             return
         pop = [node.name]*expansion_factor
-        pop = map(lambda x: mutate(a, timestep, x), pop)
-        pop = selectionFn(pop)
+        pop = map(lambda x: mutate(a, timestep, x), pop) 
+        pop = selectionFn(pop) #the survivors
         for taxa in pop:
             new_node = node.add_child(name = taxa)
             new_node.dist = timestep
             tree_helper(curr_time+timestep, new_node)
     tree_helper(0, t)
     return t
+
+"""
+Kills 60 percent of the population.
+"""
 def simple_killing(pop):
     return filter(lambda y: np.random.rand() > .4, pop)
+
+
 print('tree sim')
 print(evolution_simulator(.1, 100, 10, 'GATTACA', simple_killing, 2))
+
+
+
+
+
