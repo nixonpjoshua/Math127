@@ -35,15 +35,27 @@ Return:
 	Else, return a and b of different letters
 
 """
-def prop_diff_a(s1,s2):
+s1 = []
+s2 = []
+
+for i, j in zip(s1, s2):
 	if len(s1) != len(s2):
-		raise ValueError('Cannot compare sequences of differing lengths')
+        raise ValueError("Cannot compute compare DNA sequences of differing length")
 
+count_trv = 0
+count_trs = 0
 
-def prop_diff_b(s1,s2):
-	if len(s1) != len(s2):
-		raise ValueError('Cannot compare sequences of differng lengths')
+transversions = ['AC', 'CA', 'AT', 'TA', 'CG', 'GC', 'GT', 'TG']
+transitions = ['AG', 'GA', 'CT', 'TC']
 
+for i, j in s1 and s2:
+	if i + j in transversions:
+		count_trv += 1
+	if i + j in transitions:
+		count_trs += 1
+
+prop_diff_a = float(count_trs) / float(len(s1))
+prop_diff_b = float(count_trv) / float(len(s1))
 
 """
 Computes the K2 distance between the two sequences.
@@ -58,10 +70,6 @@ Returns:
 """
 
 def K2_distance(s1, s2):
-	prop_diff_a = prop_diff_a(s1,s2)
-
-	prop_diff_b = prop_diff_b(s1,s2)
-
 	return 0.5(np.log(1/(1-2*prop_diff_a - prop_diff_b))) + 0.25(np.log(1/(2*prop_diff_b)))
 
 
