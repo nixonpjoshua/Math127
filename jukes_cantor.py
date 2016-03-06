@@ -50,7 +50,7 @@ def prop_diff(s1,s2):
     # float(2)/float(6)  
     # """
     if len(s1) != len(s2):
-        raise ValueError("Cannot compute compare DNA sequences of differing lenth")
+        raise ValueError("Cannot compute compare DNA sequences of differing length")
     diffs = 0
     i     = 0
     while i < len(s1):
