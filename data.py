@@ -3,10 +3,10 @@ from scipy.io import loadmat
 from mutate import *
 
 
-hiv_data = loadmat('flhivdata.mat')
+hiv_data = loadmat('flhivdata.m')
 
 
-# print(hiv_data.keys())
+print(hiv_data.keys())
 
 # print(hiv_data["lc5"])
 
@@ -15,8 +15,8 @@ hiv_data = loadmat('flhivdata.mat')
 # print(hiv_data["__globals__"])
 
 
-print('tree sim')
-print(evolution_simulator(.1, 100000, 10, 'GATTACA', simple_killing, 2))
+# print('tree sim')
+# print(evolution_simulator(.1, 1000, 10, 'GATTACA', simple_killing, 2))
 
 
 

@@ -286,4 +286,4 @@ ptd(ptd=='a')='A';ptd(ptd=='c')='C';ptd(ptd=='g')='G';ptd(ptd=='t')='T';
 
 
 
-
+
