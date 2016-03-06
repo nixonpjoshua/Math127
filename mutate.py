@@ -117,7 +117,7 @@ def evolution_simulator(a, sim_time, timestep, seq,selectionFn, paramater, expan
             return
         pop = [t.name]*expansion_factor
         pop = map(lambda x: mutate(a, timestep, x), pop) # Mutates everything in the population
-        pop = selectionFn(pop) # selects the survivors
+        pop = selectionFn(pop,parameter) # selects the survivors
         for taxa in pop:
             new_t = t.add_child(name = taxa)
             new_t.dist = timestep
@@ -134,7 +134,7 @@ Kills on average "proportion" of the population. (Uniform Distribution)
 def uniform_killing(pop, parameter):
 	# filter keeps seqeunces less than proportion
 	proportion = parameter[0]
-    return filter(lambda y: np.random.rand() < proportion, pop)
+	return filter(lambda y: np.random.rand() < proportion, pop)
 
 
 print('tree sim')
