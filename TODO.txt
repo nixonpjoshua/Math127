@@ -1,5 +1,6 @@
 TODO Code:
 
+<<<<<<< Updated upstream
 1) Get Kimura Models going
 2) Decide what to do data analysis
 
@@ -8,6 +9,12 @@ TODO Not Code:
 0) Get the write up looking nice
 1) Does NJ get the interior nodes correct?
 2) Are the different ways to calculate mutate, logically equivalent? 
+=======
+1) Finish Implementing Mutate
+2) Debug Neighbor Joining Algorithm
+3) Finish up Write-up of the p 
+4)
+>>>>>>> Stashed changes
 
 #############################################
 # NOTE: Dynerman Outline Email is Below     #
