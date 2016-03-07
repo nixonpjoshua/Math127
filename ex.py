@@ -56,15 +56,7 @@ def num_div(n,k):
 			return i-1
 		i += 1
 
-# i = 0
-# while i < 10:
-# 	foo = np.dot(foo,foo)
-# 	print(foo)
-# 	i += 1
-# i = np.array([[5, 0], [3, -5]])
-# print(LA.matrix_power(i, 3))
 
-# print(np.zeros((3,3)))
 
 
 

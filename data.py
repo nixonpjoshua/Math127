@@ -1,58 +1,59 @@
 from scipy.io import loadmat
-
+from jukes_cantor import *
+from distance_based_trees import *
 from mutate import *
 
 
 hiv_data = loadmat('flhivdata.mat')
 
-#UNUSED Data
-ptb4 ='ataagacaagcacattgtaacattagtggagcaaaatggaataatactatagaacaggta'
-ptb5 ='aagacaaaattaagagaacaatttgggaataaaacaataatctttaatcactcctcagga'
-ptb6 ='ggggacccagaaattgtaatgcacagttttaattgtggagggg'
-
-
 print(hiv_data.keys())
 
-## Truncated data from new Matlab File  Prof. Dynerman Sentus
+dnt    = hiv_data["dnt"][0]
 
-d0   ='ctagcagaagaagaggtagtaattagatctgccaatttcacagacaatgctaaaatcata'
-d1   ='cccaacaacaatacaagaaaaggtatacatataggaccagggagagcattttatgcaaca'
-d2   ='agtagagaaaaatggaataatactttaaaccaggtagttacagaattaagggaacaattt'
+ctrl_1 = hiv_data["lc1"][0]
+ctrl_5 = hiv_data["lc5"][0]
 
-ptb1 ='ctagcagaagaagagatagtaattagatctgccaatttcacagacaatgctaaaatcata'
-ptb2 ='atagtacagctgaatgcatctgtagaaattaattgtacaagacccgacaacaatacaaga'
-ptb3 ='aaaggtatacatataggaccagggagggcattttatgcaacaggagaaataataggagat'
+ptb    = hiv_data["ptb"][0]
+ptc	   = hiv_data["ptc"][0]
+ptd    = hiv_data["ptd"][0]
 
-ptc1 ='ctagcagaagaagaggtagtaattagatctgccgatttcacagacaatgctaaaatcata'
-ptc2 ='aagaaaaggtatacatataggaccagggagagcagtttatgcaacagacagaataatagg'
-ptc3 ='tagttacaaaattaagagaacaatttgtgaataaaacaataatctttactcacccctcag'
+min_len = min(len(dnt),len(ctrl_1),len(ctrl_5),len(ptb),len(ptc),len(ptd))
+print(min_len)
 
-ptd1 ='ctagcagaagaagaggtagtaattagatctgcaaatttctcggacaatgctaaaaccata'
-ptd2 ='caataatacaagacaaagtatacctataggaccagggaaagcagtttatgcaacaggaca'
-ptd3 ='taaaagaacaatttaagaataaaacaatagtcttcaatcaatcctcaggaggggacccag'
+def chop(seq):
+	ans    = min_len*["o"]
+	tokens = list(seq)
+	for i in xrange(min_len):
+		ans[i] = tokens[i]
+	return ''.join(ans)
 
-lc1a ='ctagcagaagaagaagtagtaattagatctgaaaatttcacgaataatgctaaaatcata'
-lc1b ='agtatacctatgggaccagggaaagcattttatacaacagaaataataggaaatataaga'
-lc1c ='gagaacaatttaagaataaaacaatagtcttcaatcactcctcaggaggggacccagaaa'
+dnt    = chop(dnt)
+ctrl_1 = chop(ctrl_1)
+ctrl_5 = chop(ctrl_5)
 
-## Patients 
+ptb    = chop(ptb)
+ptc	   = chop(ptc)
+ptd    = chop(ptd)
 
-ptb = [ptb1, ptb2, ptb3] 
-ptc = [ptc1, ptc2, ptc3]
-ptd = [ptd1, ptd2, ptd3]
+names = ["dnt", "ptb", "ptc", "ptd", "ctrl1", "ctrl5"]
+seqs  = [dnt, ptb, ptc, ptd, ctrl_1, ctrl_5]
 
+M = JC_matrix_maker(seqs)
 
-## Dentist
+UPGMA(M, names)
 
-dnt  = [d0, d1,  d2]
+names = ["dnt", "ptb", "ptc", "ptd", "ctrl1", "ctrl5"]
+seqs  = [dnt, ptb, ptc, ptd, ctrl_1, ctrl_5]
+M = JC_matrix_maker(seqs)
+tree = neighbor_joining(M, names)
+names = ["dnt", "ptb", "ptc", "ptd", "ctrl1", "ctrl5"]
 
-## Control 
+M = np.array([[ 0        ,  0.04615385,  0.04923077,  0.12923077,  0.40307692, 0.11692308],
+       		  [ 0        ,  0         ,  0.06461538,  0.13230769,  0.39384615, 0.12      ],
+              [ 0        ,  0         ,  0         ,  0.13538462,  0.40923077, 0.13538462],
+       		  [ 0        ,  0         ,  0         ,  0         ,  0.4       , 0.11384615],
+       		  [ 0        ,  0         ,  0         ,  0         ,  0         , 0.38461538],
+              [ 0        ,  0         ,  0         ,  0         ,  0         , 0        ]])
 
-ctl = [lc1a, lc1b, lc1c]
-
-
-
-
-
-
-
+tree = neighbor_joining(M, names)
+tree.show()
