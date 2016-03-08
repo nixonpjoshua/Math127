@@ -1,6 +1,6 @@
 import numpy as np
 
-###########################
+
 """
 Construct a Kimura-2 Paramter distance matrix with specified alpha, a, and beta, b.
 
@@ -12,11 +12,13 @@ Return:
 """
 
 def K2_matrix(a, b):
-		
-	M = np.array([1-a-2b, b, b, a],
-				[b, 1-a-2b, a, b]
-				[b, a, 1-a-2b, b]
-				[a, b, b, 1-a-2b])
+	dg = 1-a-2*b
+	M = np.array([
+				 [dg, b, b, a],
+				 [b, dg, a, b],
+				 [b, a, dg, b],
+				 [a, b, b, dg]
+				 ])
 	return M
 
 """
@@ -35,27 +37,30 @@ Return:
 	Else, return a and b of different letters
 
 """
-s1 = []
-s2 = []
+def proportion_trv(s1,s2):
+	num_trv = 0
+	transversions = [('A','C'),('C','A'), ('A','T'), ('T','A'), ('C','G'), ('G','C'), ('G','T'), ('T','G')]
+	s1     = list(s1)
+	s2     = list(s2)
+	length = float(len(s1))
+	zipped = zip(s1,s2)
+	for i in xrange(len(zipped)):
+		if zipped[i] in transversions:
+			num_trv +=  1
+	return num_trv/length
 
-for i, j in zip(s1, s2):
-	if len(s1) != len(s2):
-        raise ValueError("Cannot compute compare DNA sequences of differing length")
+def proportion_trs(s1,s2):
+	num_trs     = 0
+	transitions = [('A','G'),('G','A'), ('C','T'), ('T','C')]
+	s1          = list(s1)
+	s2          = list(s2)
+	length      = float(len(s1))
+	zipped      = zip(s1,s2)
+	for i in xrange(len(zipped)):
+		if zipped[i] in transitions:
+			num_trs = num_trs + 1
+	return num_trs/len(s1)
 
-count_trv = 0
-count_trs = 0
-
-transversions = ['AC', 'CA', 'AT', 'TA', 'CG', 'GC', 'GT', 'TG']
-transitions = ['AG', 'GA', 'CT', 'TC']
-
-for i, j in s1 and s2:
-	if i + j in transversions:
-		count_trv += 1
-	if i + j in transitions:
-		count_trs += 1
-
-prop_diff_a = float(count_trs) / float(len(s1))
-prop_diff_b = float(count_trv) / float(len(s1))
 
 """
 Computes the K2 distance between the two sequences.
@@ -70,18 +75,39 @@ Returns:
 """
 
 def K2_distance(s1, s2):
-	return 0.5(np.log(1/(1-2*prop_diff_a - prop_diff_b))) + 0.25(np.log(1/(2*prop_diff_b)))
+ 	prop_trv = proportion_trv(s1,s2)
+ 	prop_trs = proportion_trs(s1,s2)
+	return -0.5*(np.log(1-2*prop_trs - 2*prop_trv)) - 0.25*(np.log(1-2*prop_trv))
+
+
+def kimura_matrix_maker(seqs):
+  M = np.zeros((len(seqs),len(seqs)))
+  for i in xrange(len(seqs) - 1):
+    s1 = seqs[i]
+    for j in xrange(i, len(seqs)):
+      s2 = seqs[j]
+      M[i][j] = K2_distance(s1,s2)
+  return M
 
 
 
+###############################
+##### FOR TESTING PURPOSES ####
+###############################
+
+a = "ACT"
+b = "CAT"
 
 
+print(proportion_trv(a,b))
 
 
+s1 = "AACTC"
+s2 = "AAGTC"
+s3 = "TAGTT"
 
-
-
-
+seqs = [s1, s2, s3]
+print(kimura_matrix_maker(seqs))
 
 
 

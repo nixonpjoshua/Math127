@@ -83,7 +83,7 @@ def JC_matrix_maker(seqs):
     s1 = seqs[i]
     for j in xrange(i, len(seqs)):
       s2 = seqs[j]
-      M[i][j] = prop_diff(s1,s2)
+      M[i][j] = JC_distance(s1,s2)
   return M
 
 
