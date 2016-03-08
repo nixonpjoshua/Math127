@@ -102,11 +102,14 @@ b = "CAT"
 print(proportion_trv(a,b))
 
 
-s1 = "AACTC"
-s2 = "AAGTC"
-s3 = "TAGTT"
+s1 = "AACTCACACTT"
+s2 = "AAGTCAGACGT"
+s3 = "TAGTTGACACG"
 
 seqs = [s1, s2, s3]
+print(K2_distance(s1,s2))
+print(K2_distance(s2,s3))
+print(K2_distance(s1,s3))
 print(kimura_matrix_maker(seqs))
 
 
