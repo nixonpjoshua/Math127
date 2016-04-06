@@ -82,7 +82,7 @@ def mutate(a, t, seq):
     tokens = list(seq)
     for i in xrange(len(tokens)):
         p = np.zeros(4)
-        p[DNA_to_position(tokens[1])] = 1
+        p[DNA_to_position(tokens[i])] = 1
         p = np.dot(M,p)
 
         rand= np.random.rand()
@@ -141,6 +141,28 @@ print('tree sim')
 parameter = [.4]
 print(evolution_simulator(.1, 10000, 10, 'GATTACA', uniform_killing, parameter, 2))
 
+
+
+
+def dynerman_mutate(a, t, seq):
+    seq = list(seq)
+    A = JC_matrix(a)
+    for i in xrange(len(seq)):
+        nuc = seq[i]
+        p = np.zeros(4)
+        p[DNA_to_position(nuc)] = 1
+        for j in xrange(t):
+            p = A.dot(p)
+            seed = np.random.rand()
+            if seed <= p[0]:
+                seq[i] = position_to_DNA(0)
+            elif seed <= p[0]+p[1]:
+                seq[i] = position_to_DNA(1)
+            elif seed <= p[0]+p[1]+p[2]:
+                seq[i] = position_to_DNA(2)
+            else:
+                seq[i] = position_to_DNA(3)
+    return ''.join(seq)
 
 
 
