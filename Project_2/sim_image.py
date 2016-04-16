@@ -9,8 +9,17 @@ import numpy as np
 """
 
 
-def project_fst( mol, R ):
-	return "NOT DONE YET"
+def project_fst(mol, R):
+	nice = np.fft.fftn(mol)
+	def transform(x, y):
+		# use R to convert to i, j, k from x, y
+	def interpolate(i, j, k):
+		# use nice to interpolate and return values
+	output = #2d array
+	for x xrange(len(output)):
+		for y xrange(len(output)):
+			output[x][y] = interpolate(transform(x, y))
+	return output
 
 
 """
