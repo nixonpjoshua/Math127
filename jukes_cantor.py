@@ -70,8 +70,8 @@ Returns:
 """
 
 def JC_distance(s1,s2):
-    prop_diffs = prop_diff(s1,s2)
-    return 1 - (np.log(1 - 4/3*prop_diffs))
+    prop_diff = prop_diff(s1,s2)
+    return 1 - (np.log(1 - 4/3*prop_diff))
 
 """
 Returns JC Matrix give sequences
