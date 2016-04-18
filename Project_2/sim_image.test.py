@@ -16,21 +16,21 @@ mol = zika_153.slices
 # Testing Whether centering the image function changes the fast fourier transform
 # 3x3x3 array
 
-test = np.array([[[ 0,  1,  2],
-        [ 3,  4,  5],
-        [ 6,  7,  8]],
-       [[ 9, 10, 11],
-        [12, 13, 14],
-        [15, 16, 17]],
-       [[18, 19, 20],
-        [21, 22, 23],
-        [24, 25, 26]]])
+# test = np.array([[[ 0,  1,  2],
+#         [ 3,  4,  5],
+#         [ 6,  7,  8]],
+#        [[ 9, 10, 11],
+#         [12, 13, 14],
+#         [15, 16, 17]],
+#        [[18, 19, 20],
+#         [21, 22, 23],
+#         [24, 25, 26]]])
 
-print("the bottom slice is", test[0])
-print("-------------------------------")
-print("the middle slice is", test[1])
-print("--------------------------------")
-print("the top slice is", test[2])
+# print("the bottom slice is", test[0])
+# print("-------------------------------")
+# print("the middle slice is", test[1])
+# print("--------------------------------")
+# print("the top slice is", test[2])
 
 """
 Playing around with utility functions
