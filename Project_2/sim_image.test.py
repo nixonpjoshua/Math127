@@ -1,5 +1,6 @@
 import numpy as np 
 from MRCFile import MRCFile
+from sim_image import *
 
 """
 Playing around with the data adnd the syntax
@@ -32,31 +33,12 @@ mol = zika_153.slices
 # print("--------------------------------")
 # print("the top slice is", test[2])
 
-"""
-Playing around with utility functions
-"""
-def center_maker(mol):
-	# Assumes Cube input
-	N = mol.shape[0] - 1 # size - 1
-	# old list is a list of the original coordinates
-	def center(old_list):
-		mid  = N/2
-		new  = [0,0,0]
-		for i in np.arange(len(old_list)):
-			old = old_list[i]
-			dist = abs(old-mid)
-			if old == mid:
-				new[i] = 0
-			elif old < mid:
-				new[i] = -1*dist
-			else:
-				new[i] = dist
-		return new
-	return center
+R = np.array([[1,0,0],
+			  [0,1,0],
+			  [0,0,1]])
 
 
-center_zika = center_maker(mol)
-print(center_zika([0,0,0]))
+project_fst(mol,R)
 
 
 
