@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 from MRCFile import MRCFile
 from sim_image import *
 
@@ -6,7 +6,7 @@ from sim_image import *
 Playing around with the data adnd the syntax
 """
 
-zika_153 = MRCFile('zika_153.mrc') # initializing object
+zika_153 = MRCFile('zika_153.mrc')  # initializing object
 zika_153.load_all_slices()
 mol = zika_153.slices
 
@@ -34,8 +34,8 @@ mol = zika_153.slices
 # print("the top slice is", test[2])
 
 R = np.array([[1,0,0],
-			  [0,1,0],
-			  [0,0,1]])
+              [0,1,0],
+              [0,0,1]])
 
 
 project_fst(mol,R)
