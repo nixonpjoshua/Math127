@@ -12,7 +12,7 @@ def convolution3D(f, g):
     I = f.shape[0]
     J = f.shape[1]
     K = f.shape[2]
-    res = np.zeros((I, J, K), dtype]=np.complex128)
+    res = np.zeros((I, J, K), dtype=np.complex128)
     for i in xrange(I):
         for j in xrange(J):
             for k in xrange(K):
