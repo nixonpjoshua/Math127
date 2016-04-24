@@ -30,7 +30,7 @@ def project_fst(mol, R):
     # For now assume that we want image to be size of mol
     # (Could actually choose anything here kind of arbitrary)
     N = mol.shape[0]
-    I = np.zeros((N, N),dtype=np.complex128)
+    I = np.zeros((N, N), dtype=np.complex128)
     for i in np.arange(N):
         for j in np.arange(N):
             # Now we need to change our i,j coordinates to x,y coordnitates
@@ -44,14 +44,14 @@ def project_fst(mol, R):
             # Because we will use these points to sample from mol_hat
             i_ = (N-1)/2 - p[1]
             j_ = p[0] + (N-1)/2
-            k_ = (N-1)/2 - p[2] # note this direction is arbitrary k is going 
-                                # from top down with highest point  corresponding to 0
+            k_ = (N-1)/2 - p[2]  # note this direction is arbitrary k is going
+            # from top down with highest point  corresponding to 0
             I[i][j] = mol_hat[int(i_), int(j_), int(k_)]  # should just give me one point
     comp = np.fft.ifft2(I)
     ans = np.zeros((N, N))
     for i in np.arange(N):
         for j in np.arange(N):
-        	ans[i][j] = np.linalg.norm(I[i][j]) 
+            ans[i][j] = np.linalg.norm(comp[i][j])
     return ans
 
 
