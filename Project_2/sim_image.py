@@ -48,7 +48,7 @@ def project_fst(mol, R):
                                 # from top down with highest point  corresponding to 0
             I[i][j] = mol_hat[int(i_), int(j_), int(k_)]  # should just give me one point
     comp = np.fft.ifft2(I)
-    ans = np.zeros(N, N)
+    ans = np.zeros((N, N))
     for i in np.arange(N):
         for j in np.arange(N):
         	ans[i][j] = np.linalg.norm(I[i][j]) 

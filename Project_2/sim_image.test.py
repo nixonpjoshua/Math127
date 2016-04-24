@@ -40,6 +40,7 @@ R = np.array([[1,0,0],
               [0,0,1]])
 image = project_fst(mol,R)
 plt.imshow(image)
+plt.show()
 
 
 
