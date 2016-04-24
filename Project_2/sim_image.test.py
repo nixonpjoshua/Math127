@@ -1,6 +1,8 @@
 import numpy as np
 from MRCFile import MRCFile
 from sim_image import *
+import matplotlib.pyplot as plt
+import matplotlib.image
 
 """
 Playing around with the data adnd the syntax
@@ -36,9 +38,9 @@ mol = zika_153.slices
 R = np.array([[1,0,0],
               [0,1,0],
               [0,0,1]])
+image = project_fst(mol,R)
+plt.imshow(image)
 
-
-print(project_fst(mol,R))
 
 
 
