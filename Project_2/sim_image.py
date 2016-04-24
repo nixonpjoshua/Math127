@@ -29,11 +29,11 @@ def project_fst(mol, R):
     # For now assume that we want image to be size of mol
     # (Could actually choose anything here kind of arbitrary)
     N = mol.shape[0]
-    I = np.zeros((N, N))
+    I = np.zeros((N, N),dtype=np.complex128)
     for i in np.arange(N):
         for j in np.arange(N):
             # Now we need to change our i,j coordinates to x,y coordnitates
-            # column changing corresponds to x changing and vice versa
+            # column changing corresponds to x chan ging and vice versa
             x = -(N-1)/2 + j
             y = (N-1)/2 - i
             # Now we must get our p_vector using span(a,b)

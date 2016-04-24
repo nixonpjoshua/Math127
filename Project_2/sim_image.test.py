@@ -38,7 +38,7 @@ R = np.array([[1,0,0],
               [0,0,1]])
 
 
-project_fst(mol,R)
+print(project_fst(mol,R))
 
 
 
