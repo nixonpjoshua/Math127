@@ -1,4 +1,5 @@
 import numpy as np 
+import matplotlib as plt 
 
 """
 Goal project_fst_mo
@@ -17,7 +18,7 @@ Args:
      R:   rotation matrix [a,b,c] (a,b,c correspond to row vectors)
 
 Returns:
-     Image
+     Image  
 """
 
 
@@ -46,4 +47,12 @@ def project_fst(mol, R):
             k_ = (N-1)/2 - p[2] # note this direction is arbitrary k is going 
                                 # from top down with highest point  corresponding to 0
             I[i][j] = mol_hat[int(i_), int(j_), int(k_)]  # should just give me one point
-    return np.fft.ifft2(I)
+    comp = np.fft.ifft2(I)
+    ans = np.zeros(N, N)
+    for i in np.arange(N):
+        for j in np.arange(N):
+        	ans[i][j] = np.linalg.norm(I[i][j]) 
+    return ans
+
+
+
