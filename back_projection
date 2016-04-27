@@ -27,9 +27,9 @@ def compute_b(I):
             for y in np.arange(len_I):
                 for z in np.arange(len_I):
                 # Compute b_i
-                fourier_im = np.fft.fft2(I)[x][y]
-                sinc_term  = np.div(np.sin(len_image*np.pi*z),pi*z)
-                ans[x][y][z] = fourier_im*sinc_term
+                    fourier_im = np.fft.fft2(I)[x][y]
+                    sinc_term  = np.div(np.sin(len_image*np.pi*z),pi*z)
+                    ans[x][y][z] = fourier_im*sinc_term
     return ans 
 
 """
