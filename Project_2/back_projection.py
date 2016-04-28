@@ -44,7 +44,7 @@ def compute_noisy(images):
         unfiltered reconstruction
     """
     num_ims = len(images)
-    ans = np.zeros((num_ims, num_ims))
+    ans = np.zeros(images[0].shape)
     for i in xrange(num_ims):
         ans = ans + compute_b(images[i])
     return ans
@@ -88,7 +88,7 @@ def compute_fltr(rots, size):
     num_rots = len(rots)
     ans = 0
     for i in xrange(num_rots):
-        ans += compute_h(rots[i])
+        ans += compute_h(rots[i], size)
     return ans
 
 
@@ -105,7 +105,7 @@ def back_project(D, images, rotations):
         molecule
     """
     noisy = compute_noisy(images)
-    fltr = compute_fltr(rotations, images.shape[0])
+    fltr = compute_fltr(rotations, images[0].shape[0])
     # is filtered but still need to perform a base change
     mol_hat = np.fft.ifftn(noisy * fltr)
     return mol_hat

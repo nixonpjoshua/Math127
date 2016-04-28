@@ -1,6 +1,7 @@
 import numpy as np
 from MRCFile import MRCFile
 from sim_image import *
+from back_projection import *
 import matplotlib.pyplot as plt
 import matplotlib.image
 import sys
@@ -21,6 +22,7 @@ Args:
 Returns:
     list of rotation matrices
 """
+
 
 def rotate_x(n):
 	# range of angle is from 0 to pi
@@ -74,7 +76,7 @@ Args:
 Returns:
     np array of rotation matrices
 """
-def rotate_y(n):
+def rotate_z(n):
 	# range of angle is from 0 to pi
 	step = np.pi/n
 	# + 1e-5 hacky fix to make range inclusive
@@ -116,9 +118,9 @@ rot_x = rotate_x(10)
 rot_y = rotate_y(10)
 rot_z = rotate_z(10)
 
-rots = np.zeroes(30)
+rots = [0]*30
 
-for i in np.arrange(30):
+for i in xrange(30):
 	if i < 10:
 		rots[i] = rot_x[i]
 	elif i < 20:
@@ -126,7 +128,7 @@ for i in np.arrange(30):
 	else:
 		rots[i] = rot_z[i-20]
 
-images = np.zeros(30)
+images = [0]*30
 for i in np.arange(len(rots)):
 	images[i] = project_fst(mol,rots[i])
 
@@ -134,7 +136,7 @@ for i in np.arange(len(rots)):
 # 153 hardcoded for zika 153
 #
 
-back_project(153, images, rots) 
+back_project(153, [images[0]], [rots[0]])
 
 
 
