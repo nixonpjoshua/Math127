@@ -5,113 +5,109 @@ import numpy as np
 
 # Introduce h_i 's for filter similar to 
 # b_i for noisy image
-
 # TODO: Conceptually understand what subparts are 
 #       so we can come up with better names
 
-"""
-Computes "b"
-Args: 
-    I: the image i.e. a 2d array calculated from fst_mol
-    
-Returns:
-    "b" a 3D array used in computing noisy image
-"""
+
 def compute_b(I):
+    """
+    Computes "b"
+    Args:
+        I: the image i.e. a 2d array calculated from fst_mol
+
+    Returns:
+        "b" a 3D array used in computing noisy image
+    """
     len_I = I.shape[0]
     # len_Image need not equal D keeping it general
     # TODO ask, for our code it is ok if its always
     # equal to D
+    fourier_image = np.fft.fft2(I)
     ans = np.zeros((len_I, len_I, len_I))
-    for x in np.arange(len_I):
-            for y in np.arange(len_I):
-                for z in np.arange(len_I):
+    for x in xrange(len_I):
+            for y in xrange(len_I):
+                for z in xrange(len_I):
                 # Compute b_i
-                    fourier_im = np.fft.fft2(I)[x][y]
-                    sinc_term  = np.div(np.sin(len_image*np.pi*z),pi*z)
-                    ans[x][y][z] = fourier_im*sinc_term
+                    sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
+                    ans[x][y][z] = fourier_image[x][y]*sinc_term
     return ans 
 
-"""
-Computes "B"
-Args: 
-    images: A list of Images i.e. a 2d arrays calculated from fst_mol
-     
-Returns:
-    "noisy" a 3D array representing a sampled function, 
-    unfiltered reconstruction
-"""
+
 def compute_noisy(images):
+    """
+    Computes "B"
+    Args:
+        images: A list of Images i.e. 2d arrrepresentingays calculated from fst_mol
+
+    Returns:
+        "noisy" a 3D array representing a sampled function,
+        unfiltered reconstruction
+    """
     num_ims = len(images)
-    b_is    = np.zeros(num_ims)
-    ans     = np.zeros((num_ims,num_ims))
-    for i in np.arange(num_ims):
-        ans = ans + compute_B(images[i])
+    ans = np.zeros((num_ims, num_ims))
+    for i in xrange(num_ims):
+        ans = ans + compute_b(images[i])
     return ans
 
-"""
-Computes "h"
-Args: 
-    rot: a rotation matrix
-    size: size of the image
 
-Returns:
-    "h" a constant used in computing noisy image
-"""
 def compute_h(rot, size):
-    c_vec = rot[:,2]
+    """
+    Computes "h"
+    Args:
+        rot: a rotation matrix
+        size: size of the image
+
+    Returns:
+        "h" a constant used in computing noisy image
+    """
+    c_vec = rot[:, 2]
     # c_vec is 3rd column of rotation matrix
     ans = 0
     # TODO double check with Dynerman this is how 
     # how to compute each part of the sum for the 
     # filter
-    for x in np.arange(size):
-        for y in np.arange(size):
-            for z in np.arange(size):
-                # x referes to input of the function
-                pos   = np.array([x,y,z])               
-                x   = size*np.pi*np.dot(pos,c_vec)
-                ans += size*np.divide(np.sin(x),x)
+    for x in xrange(size):
+        for y in xrange(size):
+            for z in xrange(size):
+                # x refers to input of the function
+                pos = np.array([x, y, z])
+                x = size*np.pi*np.dot(pos, c_vec)
+                ans += size*np.sin(x)/x
     return ans 
 
 
-
-"""
-Computes filter for taking noise out of images
-Args: 
-    rots: A list of rotations 
-     
-Returns:
-    filter is a scalar that gives that filters noisy image
-"""
-
 def compute_fltr(rots, size):
+    """
+    Computes filter for taking noise out of images
+    Args:
+        rots: A list of rotations
+
+    Returns:
+        filter is a scalar that gives that filters noisy image
+    """
     num_rots = len(rots)
     ans = 0
-    for i in np.arange(num_rots):
+    for i in xrange(num_rots):
         ans += compute_h(rots[i])
     return ans
 
 
-"""
-Creates a 3D backprojection using images gathered from fst_mol 
-Args: 
-    images:    A list of Images 
-    rotations: A list of rotation matrices 
-    D: size of the image i.e. mol.shape[0]
-     
-Returns:
-    DxDxD Array that represents the 3D reconstruction of the 
-    molecule
-"""
-
-
 def back_project(D, images, rotations):
-    noisy     = compute_noisy(images)
-    fltr      = compute_fltr(rotations, images.shape[0])
-    filtered  = noisy * fltr
+    """
+    Creates a 3D backprojection using images gathered from fst_mol
+    Args:
+        images:    A list of Images
+        rotations: A list of rotation matrices
+        D: size of the image i.e. mol.shape[0]
+
+    Returns:
+        DxDxD Array that represents the 3D reconstruction of the
+        molecule
+    """
+    noisy = compute_noisy(images)
+    fltr = compute_fltr(rotations, images.shape[0])
     # is filtered but still need to perform a base change
-    mol_hat   = np.fft.ifftn()
+    mol_hat = np.fft.ifftn(noisy * fltr)
     return mol_hat
 
 
