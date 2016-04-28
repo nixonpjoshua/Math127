@@ -36,7 +36,7 @@ def rotate_x(n):
 							   [ 0 , np.sin(i), np.cos(i)]
 							   ])
 		matrices.append(new_matrix)
-	return matrices
+	return np.array(matrices)
 
 """
 Cooks up "evenly spaceed" rotation matrices that rotate 
@@ -62,7 +62,7 @@ def rotate_y(n):
 							   [ -np.sin(i) , 0, np.cos(i)]
 							   ])
 		matrices.append(new_matrix)
-	return matrices
+	return np.array(matrices)
 
 """
 Cooks up "evenly spaceed" rotation matrices that rotate 
@@ -88,7 +88,11 @@ def rotate_y(n):
 							   [ 0 , 0, 1]
 							   ])
 		matrices.append(new_matrix)
-	return matrices
+	return np.array(matrices)
+
+zika_153 = MRCFile('zika_153.mrc')  # initializing object
+zika_153.load_all_slices()
+mol = zika_153.slices
 
 
 
@@ -97,36 +101,39 @@ def rotate_y(n):
 
 
 
+##############################
+#    Test Script			#
+##############################
+
+zika_153 = MRCFile('zika_153.mrc')  # initializing object
+zika_153.load_all_slices()
+mol = zika_153.slices
+
+rot_x = rotate_x(10)
+rot_y = rotate_y(10)
+rot_z = rotate_z(10)
+
+rots = np.zeroes(30)
+
+for i in np.arrange(30):
+	if i < 10:
+		rots[i] = rot_x[i]
+	elif i < 20:
+		rots[i] = rot_y[i-10]
+	else:
+		rots[i] = rot_z[i-20]
+
+images = np.zeros(30)
+for i in np.arange(len(rots)):
+	images[i] = project_fst(mol,rots[i])
 
 
+# 
+# 153 compare 
+#
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+back_project(153, images, rots) 
 
 
 
