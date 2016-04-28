@@ -42,10 +42,11 @@ def project_fst(mol, R):
             # Note that p vector is a vector from R^3
             # Now we must change p from x,y,z to i_,j_,k_
             # Because we will use these points to sample from mol_hat
-            i_ = (N-1)/2 - p[1]
-            j_ = p[0] + (N-1)/2
-            k_ = (N-1)/2 - p[2]  # note this direction is arbitrary k is going
+            i_ = float(N-1)/2 - p[1]
+            j_ = p[0] + float(N-1)/2
+            k_ = float(N-1)/2 - p[2]  # note this direction is arbitrary k is going
             # from top down with highest point  corresponding to 0
+            print (i_, j_, k_)
             I[i][j] = mol_hat[int(i_), int(j_), int(k_)]  # should just give me one point
     comp = np.fft.ifft2(I)
     ans = np.zeros((N, N))
