@@ -99,11 +99,14 @@ mol = zika_153.slices
 
 
 
-
-
 ##############################
 #    Test Script			#
 ##############################
+
+
+
+
+
 
 zika_153 = MRCFile('zika_153.mrc')  # initializing object
 zika_153.load_all_slices()
@@ -127,11 +130,9 @@ images = np.zeros(30)
 for i in np.arange(len(rots)):
 	images[i] = project_fst(mol,rots[i])
 
-
 # 
-# 153 compare 
+# 153 hardcoded for zika 153
 #
-
 
 back_project(153, images, rots) 
 
