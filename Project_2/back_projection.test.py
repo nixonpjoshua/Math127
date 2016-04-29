@@ -114,29 +114,29 @@ zika_153 = MRCFile('zika_153.mrc')  # initializing object
 zika_153.load_all_slices()
 mol = zika_153.slices
 
-rot_x = rotate_x(10)
-rot_y = rotate_y(10)
-rot_z = rotate_z(10)
+rot_x = rotate_x(1)
+rot_y = rotate_y(1)
+rot_z = rotate_z(1)
 
-rots = [0]*30
+rots = [0]*3
 
-for i in xrange(30):
-	if i < 10:
+for i in xrange(3):
+	if i < 1:
 		rots[i] = rot_x[i]
-	elif i < 20:
-		rots[i] = rot_y[i-10]
+	elif i < 2:
+		rots[i] = rot_y[i-1]
 	else:
-		rots[i] = rot_z[i-20]
+		rots[i] = rot_z[i-2]
 
-images = [0]*30
+images = [0]*3
 for i in np.arange(len(rots)):
 	images[i] = project_fst(mol,rots[i])
 
-# 
+# b
 # 153 hardcoded for zika 153
 #
 
-back_project(153, [images[0]], [rots[0]])
+print(back_project(153, [images[0]], [rots[0]]))
 
 
 

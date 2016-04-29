@@ -23,13 +23,17 @@ def compute_b(I):
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
-    ans = np.zeros((len_I, len_I, len_I))
+    ans = np.zeros((len_I, len_I, len_I), dtype=np.complex128)
     for x in xrange(len_I):
-            for y in xrange(len_I):
-                for z in xrange(len_I):
+        for y in xrange(len_I):
+            for z in xrange(len_I):
                 # Compute b_i
+                if z == 0:
+                    sinc_term = 1 #TODO check that this is the right thing to do
+                else:
                     sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
-                    ans[x][y][z] = fourier_image[x][y]*sinc_term
+
+                ans[x][y][z] = fourier_image[x][y]*np.complex128(sinc_term)
     return ans 
 
 
@@ -72,7 +76,10 @@ def compute_h(rot, size):
                 # x refers to input of the function
                 pos = np.array([x, y, z])
                 x = size*np.pi*np.dot(pos, c_vec)
-                ans += size*np.sin(x)/x
+                if x == 0:
+                    ans += size
+                else:
+                    ans += size*np.sin(x)/x
     return ans 
 
 
