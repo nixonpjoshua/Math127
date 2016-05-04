@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image
 import sys
 
-from mayavi.mlab import *
+#from mayavi.mlab import * TODO talk to Dynerman see if can get this working
 
 # Cooking up our own set of rotation matrices
 # For more information see 
