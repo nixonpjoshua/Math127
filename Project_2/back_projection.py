@@ -18,22 +18,20 @@ def compute_b(I):
         "b" a 3D array used in computing noisy image
     """
     len_I = I.shape[0]
-    # len_Image need not equal D keeping it general
+    # len_Image need    # fourier_image_ext = np.array([fourier_image for i in xrange(len_I)]) not equal D keeping it general
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
-    ans = np.zeros((len_I, len_I, len_I), dtype=np.complex128)
-    for x in xrange(len_I):
-        for y in xrange(len_I):
-            for z in xrange(len_I):
-                # Compute b_i
-                if z == 0:
-                    sinc_term = 1 #TODO check that this is the right thing to do
-                else:
-                    sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
-
-                ans[x][y][z] = fourier_image[x][y]*np.complex128(sinc_term)
-    return ans
+    z_list = []
+    for z in xrange(len_I):
+        # Compute b_i
+        if z == 0:
+            sinc_term = 1 #TODO check that this is the right thing to do
+        else:
+            sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
+        z_list.append(np.complex128(sinc_term))
+    z_list = np.array(z_list).reshape(len_I, 1, 1)
+    return z_list*fourier_image
 
 
 def compute_noisy(images):
