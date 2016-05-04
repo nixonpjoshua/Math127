@@ -1,5 +1,6 @@
 import numpy as np 
-import matplotlib as plt 
+import matplotlib as plt
+from scipy.interpolate import RegularGridInterpolator
 
 """
 Goal project_fst_mo
@@ -9,20 +10,18 @@ Goal project_fst_mo
 2a. Interpolation buisness that I don't quite understand how to code up
 """
 
-"""
-Creates an "image" given NxNxN matrix representation of mol and rotation 
-matrix R
-Args:
-     mol: An NxNxN array that serves as an approximation for a function
-          from R^3 --> R
-     R:   rotation matrix [a,b,c] (a,b,c correspond to row vectors)
-
-Returns:
-     Image  
-"""
-
-
 def project_fst(mol, R):
+    """
+    Creates an "image" given NxNxN matrix representation of mol and rotation 
+    matrix R
+    Args:
+         mol: An NxNxN array that serves as an approximation for a function
+              from R^3 --> R
+         R:   rotation matrix [a,b,c] (a,b,c correspond to row vectors)
+
+    Returns:
+         Image  
+    """
     mol_hat = np.fft.fftn(mol)
     # Fix the coordinate system mol_hat should really be centered
     # at the origin
@@ -30,7 +29,10 @@ def project_fst(mol, R):
     # For now assume that we want image to be size of mol
     # (Could actually choose anything here kind of arbitrary)
     N = mol.shape[0]
-    I = np.zeros((N, N), dtype=np.complex128)
+    N_range = np.array(range(N))
+    inter = RegularGridInterpolator((N_range, N_range, N_range), mol_hat,method='linear', bounds_error=False, fill_value=0)
+
+    trans = np.zeros((N, N, 3))
     for i in np.arange(N):
         for j in np.arange(N):
             # Now we need to change our i,j coordinates to x,y coordnitates
@@ -42,11 +44,13 @@ def project_fst(mol, R):
             # Note that p vector is a vector from R^3
             # Now we must change p from x,y,z to i_,j_,k_
             # Because we will use these points to sample from mol_hat
-            i_ = (N-1)/2 - p[1]
-            j_ = p[0] + (N-1)/2
-            k_ = (N-1)/2 - p[2]  # note this direction is arbitrary k is going
+            i_ = float(N-1)/2 - p[1]
+            j_ = p[0] + float(N-1)/2
+            k_ = float(N-1)/2 - p[2]  # note this direction is arbitrary k is going
             # from top down with highest point  corresponding to 0
-            I[i][j] = mol_hat[int(i_), int(j_), int(k_)]  # should just give me one point
+            trans[i, j] = i_, j_, k_
+    I = inter(trans)
+
     comp = np.fft.ifft2(I)
     ans = np.zeros((N, N))
     for i in np.arange(N):
