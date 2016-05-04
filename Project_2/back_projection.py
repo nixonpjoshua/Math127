@@ -8,7 +8,6 @@ import numpy as np
 # TODO: Conceptually understand what subparts are 
 #       so we can come up with better names
 
-
 def compute_b(I):
     """
     Computes "b"
@@ -34,7 +33,7 @@ def compute_b(I):
                     sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
 
                 ans[x][y][z] = fourier_image[x][y]*np.complex128(sinc_term)
-    return ans 
+    return ans
 
 
 def compute_noisy(images):
@@ -115,8 +114,10 @@ def back_project(D, images, rotations):
     fltr = compute_fltr(rotations, images[0].shape[0])
     # is filtered but still need to perform a base change
     mol_hat = np.fft.ifftn(noisy * fltr)
-    return mol_hat
-
-
-
- 
+    length = mol_hat.shape[0]
+    ans = np.zeros((length, length, length))
+    for x in xrange(length):
+        for y in xrange(length):
+            for z in xrange(length):
+                ans[x, y, z] = np.linalg.norm(mol_hat[x, y, z])
+    return ans
