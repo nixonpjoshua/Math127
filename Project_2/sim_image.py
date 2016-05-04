@@ -1,5 +1,6 @@
 import numpy as np 
-import matplotlib as plt 
+import matplotlib as plt
+from scipy.interpolate import RegularGridInterpolator
 
 """
 Goal project_fst_mo
@@ -30,6 +31,9 @@ def project_fst(mol, R):
     # For now assume that we want image to be size of mol
     # (Could actually choose anything here kind of arbitrary)
     N = mol.shape[0]
+    N_range = np.array(range(N))
+    inter = RegularGridInterpolator((N_range, N_range, N_range), mol_hat,method='linear', bounds_error=False, fill_value=0)
+
     I = np.zeros((N, N), dtype=np.complex128)
     for i in np.arange(N):
         for j in np.arange(N):
@@ -46,10 +50,9 @@ def project_fst(mol, R):
             j_ = p[0] + float(N-1)/2
             k_ = float(N-1)/2 - p[2]  # note this direction is arbitrary k is going
             # from top down with highest point  corresponding to 0
-            try:
-                I[i][j] = mol_hat[int(i_), int(j_), int(k_)]  # should just give me one point
-            except:
-                I[i][j] = 0
+            I[i][j] = inter([i_, j_, k_])[0]
+            #TODO maybe there can only be one call to inter since it takes and returns an array
+
     comp = np.fft.ifft2(I)
     ans = np.zeros((N, N))
     for i in np.arange(N):
