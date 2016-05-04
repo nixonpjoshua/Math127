@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image
 import sys
 
+#from mayavi.mlab import * TODO talk to Dynerman see if can get this working
 
 # Cooking up our own set of rotation matrices
 # For more information see 
@@ -138,7 +139,7 @@ for i in np.arange(len(rots)):
 
 print(back_project(153, [images[0]], [rots[0]]))
 
-
+# mayavi.mlab.contour3d(mayavi.mlab.contour3d)
 
 
 

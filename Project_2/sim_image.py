@@ -10,20 +10,18 @@ Goal project_fst_mo
 2a. Interpolation buisness that I don't quite understand how to code up
 """
 
-"""
-Creates an "image" given NxNxN matrix representation of mol and rotation 
-matrix R
-Args:
-     mol: An NxNxN array that serves as an approximation for a function
-          from R^3 --> R
-     R:   rotation matrix [a,b,c] (a,b,c correspond to row vectors)
-
-Returns:
-     Image  
-"""
-
-
 def project_fst(mol, R):
+    """
+    Creates an "image" given NxNxN matrix representation of mol and rotation 
+    matrix R
+    Args:
+         mol: An NxNxN array that serves as an approximation for a function
+              from R^3 --> R
+         R:   rotation matrix [a,b,c] (a,b,c correspond to row vectors)
+
+    Returns:
+         Image  
+    """
     mol_hat = np.fft.fftn(mol)
     # Fix the coordinate system mol_hat should really be centered
     # at the origin
