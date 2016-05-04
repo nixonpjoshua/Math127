@@ -23,16 +23,14 @@ def compute_b(I):
     # equal to D
     fourier_image = np.fft.fft2(I)
     ans = np.zeros((len_I, len_I, len_I), dtype=np.complex128)
-    for x in xrange(len_I):
-        for y in xrange(len_I):
-            for z in xrange(len_I):
-                # Compute b_i
-                if z == 0:
-                    sinc_term = 1 #TODO check that this is the right thing to do
-                else:
-                    sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
+    for z in xrange(len_I):
+        # Compute b_i
+        if z == 0:
+            sinc_term = 1 #TODO check that this is the right thing to do
+        else:
+            sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
 
-                ans[x][y][z] = fourier_image[x][y]*np.complex128(sinc_term)
+        ans[:, :, z] = fourier_image*np.complex128(sinc_term)
     return ans
 
 
