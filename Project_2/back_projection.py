@@ -22,16 +22,21 @@ def compute_b(I):
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
-    z_list = []
-    for z in xrange(len_I):
-        # Compute b_i
-        if z == 0:
-            sinc_term = 1 #TODO check that this is the right thing to do
-        else:
-            sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
-        z_list.append(np.complex128(sinc_term))
-    z_list = np.array(z_list).reshape(len_I, 1, 1)
-    return z_list*fourier_image
+    z = np.arange(len_I)
+    sinc_terms = np.complex128(np.sinc(len_I*z)*len_I).reshape(len_I, 1, 1)
+    # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
+
+    # z_list = []
+    # for z in xrange(len_I):
+    #     # Compute b_i
+    #     if z == 0:
+    #         sinc_term = 1 #TODO note that at zero we used to have it be one
+    #     else:
+    #         sinc_term = np.sinc(len_I*z)*len_I
+    #         # sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
+    #     z_list.append(np.complex128(sinc_term))
+    # z_list = np.array(z_list).reshape(len_I, 1, 1)
+    return sinc_terms*fourier_image
 
 
 def compute_noisy(images):
@@ -44,9 +49,8 @@ def compute_noisy(images):
         "noisy" a 3D array representing a sampled function,
         unfiltered reconstruction
     """
-    num_ims = len(images)
     ans = np.zeros(images[0].shape)
-    for i in xrange(num_ims):
+    for i in xrange(len(images)):
         ans = ans + compute_b(images[i])
     return ans
 
@@ -97,4 +101,5 @@ def back_project(D, images, rotations):
         DxDxD Array that represents the 3D reconstruction of the
         molecule
     """
-    return np.real(np.fft.ifftn(compute_noisy(images)*compute_fltr(rotations, images[0].shape[0])))
+    # is filtered but still need to perform a base change
+    return np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
