@@ -79,9 +79,8 @@ def compute_fltr(rots, size):
     Returns:
         filter is a scalar that gives that filters noisy image
     """
-    num_rots = len(rots)
     ans = 0
-    for i in xrange(num_rots):
+    for i in xrange(len(rots)):
         ans += compute_h(rots[i], size)
     return ans
 
@@ -98,14 +97,4 @@ def back_project(D, images, rotations):
         DxDxD Array that represents the 3D reconstruction of the
         molecule
     """
-    noisy = compute_noisy(images)
-    fltr = compute_fltr(rotations, images[0].shape[0])
-    # is filtered but still need to perform a base change
-    mol_hat = np.fft.ifftn(noisy * fltr)
-    length = mol_hat.shape[0]
-    ans = np.zeros((length, length, length))
-    for x in xrange(length):
-        for y in xrange(length):
-            for z in xrange(length):
-                ans[x, y, z] = np.real(mol_hat[x, y, z])
-    return ans
+    return np.real(np.fft.ifftn(compute_noisy(images)*compute_fltr(rotations, images[0].shape[0])))
