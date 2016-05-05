@@ -63,16 +63,11 @@ def compute_h(rot, size):
     """
     c_vec = rot[:, 2]
     # c_vec is 3rd column of rotation matrix
-    ans = 0
-    # TODO double check with Dynerman this is how 
-    # how to compute each part of the sum for the 
-    # filter
-    x = np.arange(size).reshape(size, 1, 1, 1)*np.ones(size*size).reshape(1, size, size, 1)
-    y = np.arange(size).reshape(1, size, 1, 1)*np.ones(size*size).reshape(size, 1, size, 1)
-    z = np.arange(size).reshape(1, 1, size, 1)*np.ones(size*size).reshape(size, size, 1, 1)
 
-    pos = np.concatenate((x, y, z), axis=3)
-
+    pos = np.concatenate((np.arange(size).reshape(size, 1, 1, 1)*np.ones(size*size).reshape(1, size, size, 1),
+                          np.arange(size).reshape(1, size, 1, 1)*np.ones(size*size).reshape(size, 1, size, 1),
+                          np.arange(size).reshape(1, 1, size, 1)*np.ones(size*size).reshape(size, size, 1, 1)), axis=3)
+    # pos[x,y,z] = [x,y,z], returns its own index
     return np.sum(size*np.sinc(size * np.pi * np.dot(pos, c_vec)))
 
 def compute_fltr(rots, size):
