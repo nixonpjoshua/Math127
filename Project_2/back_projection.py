@@ -22,16 +22,26 @@ def compute_b(I):
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
+<<<<<<< HEAD
     z_list = []
+=======
+    ans = np.zeros((len_I, len_I, len_I), dtype=np.complex128)
+>>>>>>> origin/jpn_faster_back_proj
     for z in xrange(len_I):
         # Compute b_i
         if z == 0:
             sinc_term = 1 #TODO check that this is the right thing to do
         else:
             sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
+<<<<<<< HEAD
         z_list.append(np.complex128(sinc_term))
     z_list = np.array(z_list).reshape(len_I, 1, 1)
     return z_list*fourier_image
+=======
+
+        ans[:, :, z] = fourier_image*np.complex128(sinc_term)
+    return ans
+>>>>>>> origin/jpn_faster_back_proj
 
 
 def compute_noisy(images):
