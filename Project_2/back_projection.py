@@ -67,18 +67,13 @@ def compute_h(rot, size):
     # TODO double check with Dynerman this is how 
     # how to compute each part of the sum for the 
     # filter
-    for x in xrange(size):
-        for y in xrange(size):
-            for z in xrange(size):
-                # x refers to input of the function
-                pos = np.array([x, y, z])
-                x = size*np.pi*np.dot(pos, c_vec)
-                if x == 0:
-                    ans += size
-                else:
-                    ans += size*np.sin(x)/x
-    return ans 
+    x = np.arange(size).reshape(size, 1, 1, 1)*np.ones(size*size).reshape(1, size, size, 1)
+    y = np.arange(size).reshape(1, size, 1, 1)*np.ones(size*size).reshape(size, 1, size, 1)
+    z = np.arange(size).reshape(1, 1, size, 1)*np.ones(size*size).reshape(size, size, 1, 1)
 
+    pos = np.concatenate((x, y, z), axis=3)
+
+    return np.sum(size*np.sinc(size * np.pi * np.dot(pos, c_vec)))
 
 def compute_fltr(rots, size):
     """
@@ -117,5 +112,5 @@ def back_project(D, images, rotations):
     for x in xrange(length):
         for y in xrange(length):
             for z in xrange(length):
-                ans[x, y, z] = np.linalg.norm(mol_hat[x, y, z])
+                ans[x, y, z] = np.real(mol_hat[x, y, z])
     return ans
