@@ -137,9 +137,13 @@ for i in np.arange(len(rots)):
 # 153 hardcoded for zika 153
 #
 
-print(back_project(153, [images[0]], [rots[0]]))
+test   = back_project(153, [images[0]], [rots[0]])
+print(test)
+visual = write_file(test)
 
-# mayavi.mlab.contour3d(mayavi.mlab.contour3d)
+
+
+
 
 
 

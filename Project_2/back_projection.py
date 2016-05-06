@@ -8,6 +8,13 @@ import numpy as np
 # TODO: Conceptually understand what subparts are 
 #       so we can come up with better names
 
+#
+# Dynerman says put the protiein in -1,1 box
+#
+#
+#
+#
+
 def compute_b(I):
     """
     Computes "b"
@@ -34,7 +41,7 @@ def compute_b(I):
     return z_list*fourier_image
 
 
-def compute_noisy(images):
+def compute_noisy(images): #i.e. B
     """
     Computes "B"
     Args:
@@ -80,7 +87,7 @@ def compute_h(rot, size):
     return ans 
 
 
-def compute_fltr(rots, size):
+def compute_fltr(rots, size): # i.e. 1/H
     """
     Computes filter for taking noise out of images
     Args:
@@ -117,5 +124,7 @@ def back_project(D, images, rotations):
     for x in xrange(length):
         for y in xrange(length):
             for z in xrange(length):
-                ans[x, y, z] = np.linalg.norm(mol_hat[x, y, z])
+                ans[x, y, z] = np.real(mol_hat[x, y, z])
     return ans
+
+
