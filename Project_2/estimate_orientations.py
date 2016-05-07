@@ -2,7 +2,6 @@ import numpy as np
 from scipy import interpolate 
 
 
-
 def sample_line(theta,gran):
     """
     Computes a sampled line in viewing sqaure through origin with angle counterclockwise from the horizon equal to theta, and granularity of sampling equal to n
@@ -13,7 +12,7 @@ def sample_line(theta,gran):
     Returns:
         Line in square through origin with angle counteclockwise from the horizon equal to theta
     """
-    if np.isclose([theta],[0]) or np.isclose([theta],[np.pi/2]) or np.isclose([theta],[np.pi]):
+    if np.isclose([theta],[0]) or np.isclose([theta],[np.pi/2]) or np.isclose([theta],[np.pi]) or np.isclose([theta],[3*np.pi/2]) or  np.isclose([theta],[2*np.pi]):
         rs = np.linspace(-1,1,gran) 
     else:
         max_r = min( abs(1./np.cos(theta)) , abs(1./np.sin(theta)))
@@ -106,7 +105,7 @@ def common_line(im1,im2, num_lines, gran):
         num_lines: a list of lines where each entry contains a list of tuples that represents a line
         gran: number of sampling points for each line
     Returns:
-    	A list of two thetas corresponding to lines 1 and 2 respectively
+    	A list of x,y coordinates multiplied by necessary sign component
 	"""
 	#TODO abstraction barrier violation make sure it works need thetas because each line is uniquely represented by a theta
 	thetas = np.linspace(0,np.pi,num_lines) 
@@ -126,6 +125,22 @@ def common_line(im1,im2, num_lines, gran):
 
 	return [com_1,com_2] #currently retuning common line as list of thetas corresponding to the images
 
+def common_lines(Images, num_lines, gran):
+	"""
+	Finds all common lines for space of images
+    
+    Args:
+    	Images: A list of NxN arrays that represent images
+        num_lines: a list of lines where each entry contains a list of tuples that represents a line
+        gran: number of sampling points for each line
+    Returns:
+    	A matrix "L" of unit vectors where L_ij is the unit vector for the line in image I that represents the "commonality between i and j.
+	"""
+	L = np.zeros((num_lines,num_lines),dtype = list)
+	for i in xrange(num_lines):
+		for j in xrange(num_lines):
+			L[i,j] = common_line(Images[i],Images[j],num_lines,gran)
+	return L
 
 
 
