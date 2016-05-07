@@ -22,16 +22,21 @@ def compute_b(I):
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
-    z_list = []
-    for z in xrange(len_I):
-        # Compute b_i
-        if z == 0:
-            sinc_term = 1 #TODO check that this is the right thing to do
-        else:
-            sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
-        z_list.append(np.complex128(sinc_term))
-    z_list = np.array(z_list).reshape(len_I, 1, 1)
-    return z_list*fourier_image
+    z = np.arange(len_I)
+    sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(len_I, 1, 1)
+    # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
+
+    # z_list = []
+    # for z in xrange(len_I):
+    #     # Compute b_i
+    #     if z == 0:
+    #         sinc_term = 1 #TODO note that at zero we used to have it be one
+    #     else:
+    #         sinc_term = np.sinc(len_I*z)*len_I
+    #         # sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
+    #     z_list.append(np.complex128(sinc_term))
+    # z_list = np.array(z_list).reshape(len_I, 1, 1)
+    return sinc_terms*fourier_image
 
 
 def compute_noisy(images):
@@ -44,9 +49,8 @@ def compute_noisy(images):
         "noisy" a 3D array representing a sampled function,
         unfiltered reconstruction
     """
-    num_ims = len(images)
     ans = np.zeros(images[0].shape)
-    for i in xrange(num_ims):
+    for i in xrange(len(images)):
         ans = ans + compute_b(images[i])
     return ans
 
@@ -63,22 +67,12 @@ def compute_h(rot, size):
     """
     c_vec = rot[:, 2]
     # c_vec is 3rd column of rotation matrix
-    ans = 0
-    # TODO double check with Dynerman this is how 
-    # how to compute each part of the sum for the 
-    # filter
-    for x in xrange(size):
-        for y in xrange(size):
-            for z in xrange(size):
-                # x refers to input of the function
-                pos = np.array([x, y, z])
-                x = size*np.pi*np.dot(pos, c_vec)
-                if x == 0:
-                    ans += size
-                else:
-                    ans += size*np.sin(x)/x
-    return ans 
 
+    pos = np.concatenate((np.arange(size).reshape(size, 1, 1, 1)*np.ones(size*size).reshape(1, size, size, 1),
+                          np.arange(size).reshape(1, size, 1, 1)*np.ones(size*size).reshape(size, 1, size, 1),
+                          np.arange(size).reshape(1, 1, size, 1)*np.ones(size*size).reshape(size, size, 1, 1)), axis=3)
+    # pos[x,y,z] = [x,y,z], returns its own index
+    return np.sum(size*np.sinc(size * np.pi * np.dot(pos, c_vec)))
 
 def compute_fltr(rots, size):
     """
@@ -89,9 +83,8 @@ def compute_fltr(rots, size):
     Returns:
         filter is a scalar that gives that filters noisy image
     """
-    num_rots = len(rots)
     ans = 0
-    for i in xrange(num_rots):
+    for i in xrange(len(rots)):
         ans += compute_h(rots[i], size)
     return ans
 
@@ -108,14 +101,5 @@ def back_project(D, images, rotations):
         DxDxD Array that represents the 3D reconstruction of the
         molecule
     """
-    noisy = compute_noisy(images)
-    fltr = compute_fltr(rotations, images[0].shape[0])
     # is filtered but still need to perform a base change
-    mol_hat = np.fft.ifftn(noisy * fltr)
-    length = mol_hat.shape[0]
-    ans = np.zeros((length, length, length))
-    for x in xrange(length):
-        for y in xrange(length):
-            for z in xrange(length):
-                ans[x, y, z] = np.linalg.norm(mol_hat[x, y, z])
-    return ans
+    return np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
