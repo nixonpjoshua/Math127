@@ -24,7 +24,6 @@ Returns:
     list of rotation matrices
 """
 
-
 def rotate_x(n):
 	# range of angle is from 0 to pi
 	step = np.pi/n
