@@ -23,7 +23,7 @@ def compute_b(I):
     # equal to D
     fourier_image = np.fft.fft2(I)
     z = np.arange(len_I)
-    sinc_terms = np.complex128(np.sinc(len_I*z)*len_I).reshape(len_I, 1, 1)
+    sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(len_I, 1, 1)
     # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
 
     # z_list = []
@@ -103,3 +103,4 @@ def back_project(D, images, rotations):
     """
     # is filtered but still need to perform a base change
     return np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
+    
