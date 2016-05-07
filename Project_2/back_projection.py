@@ -103,4 +103,3 @@ def back_project(D, images, rotations):
     """
     # is filtered but still need to perform a base change
     return np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
-    
