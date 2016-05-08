@@ -7,7 +7,11 @@ Goal project_fst_mo
 
 1.  Compute 3D DFT of molecule mol, producing F(mol) another 3D Array
 2.  Restrict F(mol) to the image plane P_f thus producing a 2D Array
-2a. Interpolation buisness that I don't quite understand how to code up
+3.  Compute IFFT of the restriction above
+
+Note that for interpolation you should use grid interpolator object (
+    i.e. returns obsject that will sample the function mol at any point)
+    Documentation should help
 """
 
 def project_fst(mol, R):
@@ -20,7 +24,7 @@ def project_fst(mol, R):
          R:   rotation matrix [a,b,c] (a,b,c correspond to row vectors)
 
     Returns:
-         Image  
+        NxN 2darray "Image"  
     """
     mol_hat = np.fft.fftn(mol)
     # Fix the coordinate system mol_hat should really be centered
