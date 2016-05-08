@@ -19,14 +19,15 @@ def sample_line(theta, gran):
     Returns:
         Line in square through origin with angle counteclockwise from the horizon equal to theta
     """
-    if np.isclose([theta], [0]) or np.isclose([theta], [np.pi/2]) or np.isclose([theta], [np.pi]) or np.isclose([theta], [3*np.pi/2]) or np.isclose([theta], [2*np.pi]):
+    if np.isclose([theta], [0]) or np.isclose([theta], [np.pi / 2]) or np.isclose([theta], [np.pi]) or np.isclose(
+            [theta], [3 * np.pi / 2]) or np.isclose([theta], [2 * np.pi]):
         rs = np.linspace(-1, 1, gran)
     else:
-        max_r = min(abs(1./np.cos(theta)), abs(1./np.sin(theta)))
+        max_r = min(abs(1. / np.cos(theta)), abs(1. / np.sin(theta)))
         rs = np.linspace(-max_r, max_r, gran)
 
-    xs = np.cos(theta)*rs
-    ys = np.sin(theta)*rs
+    xs = np.cos(theta) * rs
+    ys = np.sin(theta) * rs
 
     return zip(xs, ys)
 
@@ -40,7 +41,7 @@ def sample_lines(n, gran):
     Returns:
         n sample lines as repreented by a list of xs and ys
     """
-    ans = [0]*n
+    ans = [0] * n
     thetas = np.linspace(0, np.pi, n)
     for i in xrange(n):
         theta = thetas[i]
@@ -63,6 +64,7 @@ def vector(list_coords, interpolator):
         ans[i] = interpolator(list(coords))[0]
     return ans
 
+
 def find_common_line(lines, im1_interpolator, im2_interpolator):
     """
     Finds common line over the space of lines
@@ -72,9 +74,9 @@ def find_common_line(lines, im1_interpolator, im2_interpolator):
     Returns:
             indeces of common lines
     """
-    max_IP      = -1  # will be over written because IP must always be positive
+    max_IP = -1  # will be over written because IP must always be positive
     max_index_1 = .2  # If not overwritten then error will be thrown because cannot
-                    # index with decimal
+    # index with decimal
     max_index_2 = .2
     # Meat of the argument go through all n**2 line combos 
     for i in xrange(len(lines)):
@@ -82,7 +84,7 @@ def find_common_line(lines, im1_interpolator, im2_interpolator):
         for j in xrange(len(lines)):
             line_2 = lines[j]
             IP = np.vdot(vector(line_1, im1_interpolator), vector(line_2, im2_interpolator))
-            if  IP > max_IP:
+            if IP > max_IP:
                 max_index_1 = i
                 max_index_2 = j
                 max_IP = IP
@@ -96,8 +98,8 @@ def find_xy(theta):
     else:
         sign = -1
     # Get Unit vector i.e solve for x when r = 1
-    x = sign*(np.cos(theta))
-    y = sign*(np.sin(theta))
+    x = sign * (np.cos(theta))
+    y = sign * (np.sin(theta))
     return [x, y]
 
 
@@ -112,7 +114,7 @@ def common_line(im1_interpolator, im2_interpolator, num_lines, gran):
     Returns:
         A list of x,y coordinates multiplied by necessary sign component
     """
-    #TODO abstraction barrier violation make sure it works need thetas because each line is uniquely represented by a theta
+    # TODO abstraction barrier violation make sure it works need thetas because each line is uniquely represented by a theta
     thetas = np.linspace(0, np.pi, num_lines)
     lines = sample_lines(num_lines, gran)
 
@@ -139,14 +141,14 @@ def common_lines(Images, num_lines, gran):
         num_lines: a list of lines where each entry contains a list of tuples that represents a line
         gran: number of sampling points for each line
     Returns:
-        A matrix "L" of unit vectors where L_ij is the unit vector for the line in image I that represents the "commonality between i and j.
+        A matrix "ans" of unit vectors where L_ij is the unit vector for the line in image I that represents the "commonality between i and j.
     """
     interpolators = map(make_interpolator, Images)
     length = len(interpolators)
-    L = np.zeros((length, length, 2))
+    ans = np.zeros((length, length, 2))
     for i in xrange(length):
-        for j in xrange(i +1, length):
+        for j in xrange(i + 1, length):
             res = common_line(interpolators[i], interpolators[j], num_lines, gran)
-            L[i, j] = res[0]
-            L[j, i] = res[1]
-    return L
+            ans[i, j] = res[0]
+            ans[j, i] = res[1]
+    return ans
