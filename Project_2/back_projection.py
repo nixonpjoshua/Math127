@@ -89,14 +89,12 @@ def compute_fltr(rots, size):
     return ans
 
 
-def back_project(D, images, rotations):
+def back_project(images, rotations):
     """
     Creates a 3D backprojection using images gathered from fst_mol
     Args:
         images:    A list of Images
         rotations: A list of rotation matrices
-        D: size of the image i.e. mol.shape[0]
-
     Returns:
         DxDxD Array that represents the 3D reconstruction of the
         molecule
