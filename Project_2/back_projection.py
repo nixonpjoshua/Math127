@@ -23,7 +23,7 @@ def compute_b(I):
     # equal to D
     fourier_image = np.fft.fft2(I)
     z = np.linspace(-1, 1,len_I)
-    sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(len_I, 1, 1)
+    sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(1, 1, len_I)
     # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
 
     # z_list = []
@@ -36,7 +36,7 @@ def compute_b(I):
     #         # sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
     #     z_list.append(np.complex128(sinc_term))
     # z_list = np.array(z_list).reshape(len_I, 1, 1)
-    return sinc_terms*fourier_image
+    return sinc_terms*fourier_image.reshape(len_I, len_I, 1)
 
 
 def compute_noisy(images):

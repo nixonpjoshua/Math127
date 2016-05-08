@@ -43,7 +43,7 @@ else:
     # TODO here we can make many images later
     for R in Rs:
         images.append(project_fst(f.slices, R))
-    # orientations = reconstruct_orientations(images, num_lines=1, granularity=1)
+    orientations = reconstruct_orientations(images, num_lines=1, granularity=1)
     # print "Rs\n"
     # print Rs
     # print "\norientations\n"
