@@ -4,6 +4,8 @@ from sim_image import project_fst
 from MRCFile import MRCFile
 import numpy as np
 import sys
+
+
 def rotate(n, axis):
     thetas = np.linspace(0, np.pi, n)
     matrices = []
@@ -31,13 +33,13 @@ def rotate(n, axis):
 def evenly_rotate(n):
     return rotate(n/3, 'x') + rotate(n/3, 'y') + rotate(n/3, 'z')
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
     print "please call with an mrc file as argument 1, and number of rotations as argument 2"
 else:
     f = MRCFile(sys.argv[1])
     f.load_all_slices()
     images = []
-    Rs = evenly_rotate(sys.argv[2])
+    Rs = evenly_rotate(int(sys.argv[2]))
     # TODO here we can make many images later
     for R in Rs:
         images.append(project_fst(f.slices, R))
