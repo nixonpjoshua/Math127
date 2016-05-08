@@ -145,10 +145,10 @@ def common_lines(Images, num_lines, gran):
     """
     interpolators = map(make_interpolator, Images)
     length = len(interpolators)
-    ans = np.zeros((length, length, 2))
+    L = np.zeros((length, length, 2))
     for i in xrange(length):
-        for j in xrange(i + 1, length):
+        for j in xrange(i, length):
             res = common_line(interpolators[i], interpolators[j], num_lines, gran)
-            ans[i, j] = res[0]
-            ans[j, i] = res[1]
-    return ans
+            L[i, j] = res[0]
+            L[j, i] = res[1]
+    return L
