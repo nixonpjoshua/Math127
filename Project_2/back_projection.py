@@ -22,7 +22,8 @@ def compute_b(I):
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
-    z = np.linspace(-1, 1,len_I)
+    fourier_image = np.fft.fftshift(fourier_image)
+    z = np.linspace(-1, f1, len_I) #TODO do we need to coordinate transform for z??
     sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(len_I, 1, 1)
     # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
 
