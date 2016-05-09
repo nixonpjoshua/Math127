@@ -22,7 +22,7 @@ def compute_b(I):
     # TODO ask, for our code it is ok if its always
     # equal to D
     fourier_image = np.fft.fft2(I)
-    z = np.linspace(-1, 1,len_I)
+    z = np.linspace(1, -1, len_I)
     sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(len_I, 1, 1)
     # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
 
@@ -36,6 +36,7 @@ def compute_b(I):
     #         # sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
     #     z_list.append(np.complex128(sinc_term))
     # z_list = np.array(z_list).reshape(len_I, 1, 1)
+
     return sinc_terms*fourier_image
 
 
@@ -100,4 +101,7 @@ def back_project(images, rotations):
         molecule
     """
     # is filtered but still need to perform a base change
-    return np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
+    ans = np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
+    ans1 = ans[len(ans)/2:,:,:]
+    ans2 = ans[:((len(ans))/2 + 1),:,:]
+    return np.concatenate([ans1, ans2])*-1
