@@ -2,6 +2,7 @@ import numpy as np
 from MRCFile import MRCFile
 from sim_image import *
 import matplotlib.pyplot as plt
+from vanheel import  random_rotation_matrix
 import matplotlib.image
 
 """
@@ -34,11 +35,11 @@ mol = zika_153.slices
 # print("the middle slice is", test[1])
 # print("--------------------------------")
 # print("the top slice is", test[2])
-
-R = np.array([[1,0,0],
-              [0,1,0],
-              [0,0,1]])
-image = project_fst(mol,R)
+#
+# R = np.array([[1,0,0],
+#               [0,1,0],
+#               [0,0,1]])
+image = project_fst(mol,random_rotation_matrix())
 plt.imshow(image)
 plt.show()
 
