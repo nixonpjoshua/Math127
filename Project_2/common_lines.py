@@ -23,16 +23,15 @@ def sample_line(theta, gran):
             [theta], [3 * np.pi / 2]) or np.isclose([theta], [2 * np.pi]):
         rs = np.linspace(-1, 1, gran)
     else:
-        max_r = min(abs(1. / np.cos(theta)), abs(1. / np.sin(theta)))
+        max_r = max(abs(1. / np.cos(theta)), abs(1. / np.sin(theta))) #TODO should this be max or min
         rs = np.linspace(-max_r, max_r, gran)
-
     xs = np.cos(theta) * rs
     ys = np.sin(theta) * rs
 
     return zip(xs, ys)
 
 
-def sample_lines(n, gran):
+def sample_lines(n, gran, thetas):
     """
     Creates n evenly spaced (w.r.t. theta) sample lines for the square
     Args:
@@ -42,7 +41,6 @@ def sample_lines(n, gran):
         n sample lines as repreented by a list of xs and ys
     """
     ans = [0] * n
-    thetas = np.linspace(0, np.pi, n)
     for i in xrange(n):
         theta = thetas[i]
         ans[i] = sample_line(theta, gran)
@@ -75,15 +73,15 @@ def find_common_line(lines, im1_interpolator, im2_interpolator):
             indeces of common lines
     """
     max_IP = -1  # will be over written because IP must always be positive
-    max_index_1 = .2  # If not overwritten then error will be thrown because cannot
+    max_index_1 = None  # If not overwritten then error will be thrown because cannot
     # index with decimal
-    max_index_2 = .2
+    max_index_2 = None
     # Meat of the argument go through all n**2 line combos 
     for i in xrange(len(lines)):
         line_1 = lines[i]
         for j in xrange(len(lines)):
             line_2 = lines[j]
-            IP = np.vdot(vector(line_1, im1_interpolator), vector(line_2, im2_interpolator))
+            IP = np.dot(vector(line_1, im1_interpolator), np.conj(vector(line_2, im2_interpolator)))
             if IP > max_IP:
                 max_index_1 = i
                 max_index_2 = j
@@ -115,13 +113,10 @@ def common_line(im1_interpolator, im2_interpolator, num_lines, gran):
         A list of x,y coordinates multiplied by necessary sign component
     """
     # TODO abstraction barrier violation make sure it works need thetas because each line is uniquely represented by a theta
-    thetas = np.linspace(0, np.pi, num_lines)
-    lines = sample_lines(num_lines, gran)
+    thetas = np.linspace(0, 2*np.pi, num_lines)
+    lines = sample_lines(num_lines, gran, thetas)
 
-    com_line = find_common_line(lines, im1_interpolator, im2_interpolator)
-
-    line_1_index = com_line[0]  # common line 1 index
-    line_2_index = com_line[1]  # common line 2 index
+    line_1_index, line_2_index = find_common_line(lines, im1_interpolator, im2_interpolator)
 
     theta_1 = thetas[line_1_index]
     theta_2 = thetas[line_2_index]
