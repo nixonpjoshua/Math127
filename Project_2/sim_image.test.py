@@ -3,6 +3,7 @@ from MRCFile import MRCFile
 from sim_image import *
 import matplotlib.pyplot as plt
 from vanheel import  random_rotation_matrix
+import time
 import matplotlib.image
 
 """
@@ -39,7 +40,10 @@ mol = zika_153.slices
 # R = np.array([[1,0,0],
 #               [0,1,0],
 #               [0,0,1]])
+start = time.time()
 image = project_fst(mol,random_rotation_matrix())
+end = time.time()
+print str(end - start)
 plt.imshow(image)
 plt.show()
 

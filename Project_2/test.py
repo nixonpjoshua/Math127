@@ -50,7 +50,7 @@ else:
     # print Rs
     # print "\norientations\n"
     # print orientations
-    f.slices = back_project(images, Rs)
+    f.slices = back_project(zip(images, Rs))
     f.write_file('true_R.mrc', overwrite=True)
     # f.slices = back_project(images, orientations)
     # f.write_file('estimated_R.mrc')

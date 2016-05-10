@@ -1,58 +1,5 @@
 import numpy as np
-
-# note b_i's are slightly diff from class
-# they have already been cleaned up
-
-# Introduce h_i 's for filter similar to 
-# b_i for noisy image
-# TODO: Conceptually understand what subparts are 
-#       so we can come up with better names
-
-def compute_b(I):
-    """
-    Computes "b"
-    Args:
-        I: the image i.e. a 2d array calculated from fst_mol
-
-    Returns:
-        "b" a 3D array used in computing noisy image
-    """
-    len_I = I.shape[0]
-    # len_Image need    # fourier_image_ext = np.array([fourier_image for i in xrange(len_I)]) not equal D keeping it general
-    # TODO ask, for our code it is ok if its always
-    # equal to D
-    fourier_image = np.fft.fft2(I)
-    z = np.linspace(-1, 1,len_I)
-    sinc_terms = np.complex128(np.sinc(len_I*z)).reshape(len_I, 1, 1)
-    # TODO note that now at z[0] it evaluates to len_I, not sure which is correct should revisit equation
-
-    # z_list = []
-    # for z in xrange(len_I):
-    #     # Compute b_i
-    #     if z == 0:
-    #         sinc_term = 1 #TODO note that at zero we used to have it be one
-    #     else:
-    #         sinc_term = np.sinc(len_I*z)*len_I
-    #         # sinc_term  = np.sin(len_I*np.pi*z)/np.pi*z
-    #     z_list.append(np.complex128(sinc_term))
-    # z_list = np.array(z_list).reshape(len_I, 1, 1)
-    return sinc_terms*fourier_image
-
-
-def compute_noisy(images):
-    """
-    Computes "B"
-    Args:
-        images: A list of Images i.e. 2d arrrepresentingays calculated from fst_mol
-
-    Returns:
-        "noisy" a 3D array representing a sampled function,
-        unfiltered reconstruction
-    """
-    ans = np.zeros(images[0].shape)
-    for i in xrange(len(images)):
-        ans = ans + compute_b(images[i])
-    return ans
+from scipy.interpolate import RegularGridInterpolator
 
 
 def compute_h(rot, size):
@@ -89,15 +36,30 @@ def compute_fltr(rots, size):
     return ans
 
 
-def back_project(images, rotations):
-    """
-    Creates a 3D backprojection using images gathered from fst_mol
-    Args:
-        images:    A list of Images
-        rotations: A list of rotation matrices
-    Returns:
-        DxDxD Array that represents the 3D reconstruction of the
-        molecule
-    """
-    # is filtered but still need to perform a base change
-    return np.real(np.fft.ifftn(compute_noisy(images) * compute_fltr(rotations, images[0].shape[0])))
+def back_project(data, use_filter = True, ):
+    N = data[0][0].shape[0]
+    r = np.zeros(N)
+    r[N/4:(N/4)*3] = 1
+    s = np.fft.fftshift(np.fft.fft(r))
+    s = np.tile(s[np.newaxis, np.newaxis, :], (N, N, 1))
+    B = np.zeros((N, N, N))
+    if use_filter:
+        H = np.zeros((N, N, N))
+    for image, R in data:
+        I_hat = np.fft.fftshift(np.fft.fft2(image))
+        I_hat = np.tile(I_hat[..., np.newaxis], (1, 1, N))
+        image = np.real(np.fft.ifftn(np.fft.ifftshift(I_hat*s)))
+        # rotate and interpolate
+        N_range = np.linspace(-1, 1, N)
+        inter = RegularGridInterpolator((N_range, N_range, N_range), image, method='linear', bounds_error=False, fill_value=0)
+
+        x, y, z = np.meshgrid(N_range, N_range, N_range)
+        C = [x.flatten(), y.flatten(), z.flatten()]
+        B += inter(np.dot(R.transpose(), C).T).reshape(N, N, N)
+        if use_filter:
+            H += compute_h(R, N)
+    if use_filter:
+        B_hat = np.fft.fftshift(np.fft.fftn(B))
+        return np.real(np.fft.ifftn(np.fft.ifftshift(B_hat/H)))
+    else:
+        return B

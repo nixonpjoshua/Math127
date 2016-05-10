@@ -1,6 +1,7 @@
-import numpy as np 
+import numpy as np
 import matplotlib as plt
 from scipy.interpolate import RegularGridInterpolator
+
 
 def project_fst(mol, R):
     """
@@ -16,7 +17,7 @@ def project_fst(mol, R):
     """
     N = mol.shape[0]
     N_range = np.linspace(-1, 1, N)
-    inter = RegularGridInterpolator((N_range, N_range, N_range), mol ,method='linear', bounds_error=False, fill_value=0)
+    inter = RegularGridInterpolator((N_range, N_range, N_range), mol, method='linear', bounds_error=False, fill_value=0)
     x, y, z = np.meshgrid(N_range, N_range, N_range)
     C = [x.flatten(), y.flatten(), z.flatten()]
     r_mol = inter(np.dot(R, C).T).reshape(N, N, N)
