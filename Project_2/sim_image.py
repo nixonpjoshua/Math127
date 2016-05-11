@@ -18,9 +18,9 @@ def project_fst(mol, R):
     N = mol.shape[0]
     N_range = np.linspace(-1, 1, N)
     inter = RegularGridInterpolator((N_range, N_range, N_range), mol, method='linear', bounds_error=False, fill_value=0)
-    x, y, z = np.meshgrid(N_range, N_range, N_range)
-    C = [x.flatten(), y.flatten(), z.flatten()]
-    r_mol = inter(np.dot(R, C).T).reshape(N, N, N)
-    image = np.fft.fftn(r_mol)
-    # image = np.fft.fftshift(image)
-    return np.real(np.fft.ifft2(image[:, :, 0]))
+    pos = np.concatenate((N_range.reshape(N, 1, 1, 1) * np.ones(N * N).reshape(1, N, N, 1),
+                          N_range.reshape(1, N, 1, 1) * np.ones(N * N).reshape(N, 1, N, 1),
+                          N_range.reshape(1, 1, N, 1) * np.ones(N * N).reshape(N, N, 1, 1)),
+                         axis=3)
+    r_mol = inter(np.dot(pos, R))
+    return np.real(np.fft.ifft2(np.fft.fftn(r_mol)[:, :, 0]))
