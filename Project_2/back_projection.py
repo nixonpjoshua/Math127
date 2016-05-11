@@ -19,18 +19,18 @@ def compute_h(rot, size):
                           np.arange(size).reshape(1, size, 1, 1)*np.ones(size*size).reshape(size, 1, size, 1),
                           np.arange(size).reshape(1, 1, size, 1)*np.ones(size*size).reshape(size, size, 1, 1)), axis=3)
     # pos[x,y,z] = [x,y,z], returns its own index
-    return size*np.sinc(size * np.pi * np.dot(pos, c_vec))
+    return np.sum(size*np.sinc(size * np.dot(pos, c_vec)))
 
 
 def back_project(data, use_filter=True):
     N = data[0][0].shape[0]
     r = np.zeros(N)
-    r[N/4:(N/4)*3] = 1
+    r[N/8:(N/8)*7] = 1
     s = np.fft.fftshift(np.fft.fft(r))
     s = np.tile(s[np.newaxis, np.newaxis, :], (N, N, 1))
     B = np.zeros((N, N, N))
     if use_filter:
-        H = np.zeros((N, N, N))
+        H = 0
     for image, R in data:
         I_hat = np.fft.fftshift(np.fft.fft2(image))
         I_hat = np.tile(I_hat[..., np.newaxis], (1, 1, N))
