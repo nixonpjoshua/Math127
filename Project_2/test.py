@@ -1,4 +1,3 @@
-from orientations_from_images import reconstruct_orientations
 from back_projection import back_project
 from sim_image import project_fst
 from MRCFile import MRCFile
@@ -6,51 +5,27 @@ from vanheel import random_rotation_matrix
 import numpy as np
 import sys
 
-
-# def rotate(n, axis):
-#     thetas = np.linspace(0, np.pi, n)
-#     matrices = []
-#     for j in np.arange(len(thetas)):
-#         i = thetas[j]
-#         if axis == 'x':
-#             new_matrix = np.array([[ 1, 0, 0],
-#                                    [ 0 , np.cos(i), -np.sin(i)],
-#                                    [ 0 , np.sin(i), np.cos(i)]
-#                                    ])
-#         if axis == 'y':
-#             new_matrix = np.array([[ np.cos(i), 0, np.sin(i)],
-#                                [ 0 , 1, 0],
-#                                [ -np.sin(i) , 0, np.cos(i)]
-#                                ])
-#         if axis == 'z':
-#             new_matrix = np.array([[ np.cos(i), -np.sin(i), 0],
-#                                [ np.sin(i) , np.cos(i), 0],
-#                                [ 0 , 0, 1]
-#                                ])
-#         matrices.append(new_matrix)
-#     return matrices
-
-#
-# def evenly_rotate(n):
-#     return rotate(n/3, 'x') + rotate(n/3, 'y') + rotate(n/3, 'z')
-
 if len(sys.argv) != 3:
     print "please call with an mrc file as argument 1, and number of rotations as argument 2"
 else:
     f = MRCFile(sys.argv[1])
     f.load_all_slices()
     images = []
+    images_noisy = []
     Rs = [random_rotation_matrix() for i in xrange(int(sys.argv[2]))]
     # TODO here we can make many images later
     for R in Rs:
-        images.append(project_fst(f.slices, R))
-    # orientations = reconstruct_orientations(images, num_lines=10, granularity=30)
-    # print orientations
-    # print "Rs\n"
-    # print Rs
-    # print "\norientations\n"
-    # print orientations
-    f.slices = back_project(zip(images, Rs))
-    f.write_file('true_R.mrc', overwrite=True)
-    # f.slices = back_project(images, orientations)
-    # f.write_file('estimated_R.mrc')
+        image = project_fst(f.slices, R)
+        images.append(image)
+        noise = np.random.normal(0.0, 20*np.mean(image), image.shape)
+        images_noisy.append(image + noise)
+    data = zip(images, Rs)
+    noisy_data = zip(images_noisy, Rs)
+    f.slices = back_project(data, use_filter=False)
+    f.write_file('#nofilter.mrc', overwrite=True)
+    f.slices = back_project(data)
+    f.write_file('filter.mrc', overwrite=True)
+    f.slices = back_project(noisy_data, use_filter=False)
+    f.write_file('#nofilter_noise.mrc', overwrite=True)
+    f.slices = back_project(noisy_data)
+    f.write_file('filter_noise.mrc', overwrite=True)

@@ -2,31 +2,35 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 
-def compute_h(rot, size):
+def compute_h(rot, D):
     """
-    Computes "h"
-    Args:
-        rot: a rotation matrix
-        size: size of the image
-
-    Returns:
-        "h" a constant used in computing noisy image
+    :param rot: the rotation matrix for a particular image
+    :param D: the size of the rho
+    :return: the component of h for this image's rotation matrix
     """
     c_vec = rot[:, 2]
     # c_vec is 3rd column of rotation matrix
 
-    pos = np.concatenate((np.arange(size).reshape(size, 1, 1, 1)*np.ones(size*size).reshape(1, size, size, 1),
-                          np.arange(size).reshape(1, size, 1, 1)*np.ones(size*size).reshape(size, 1, size, 1),
-                          np.arange(size).reshape(1, 1, size, 1)*np.ones(size*size).reshape(size, size, 1, 1)), axis=3)
+    pos = np.concatenate((np.arange(D).reshape(D, 1, 1, 1)*np.ones(D*D).reshape(1, D, D, 1),
+                          np.arange(D).reshape(1, D, 1, 1)*np.ones(D*D).reshape(D, 1, D, 1),
+                          np.arange(D).reshape(1, 1, D, 1)*np.ones(D*D).reshape(D, D, 1, 1)), axis=3)
     # pos[x,y,z] = [x,y,z], returns its own index
-    return np.sum(size*np.sinc(size * np.dot(pos, c_vec)))
+    return np.sum(D*np.sinc(D * np.dot(pos, c_vec)))
 
 
-def back_project(data, use_filter=True):
+def back_project(data, use_filter=True, D_percent=.5):
+    """
+    :param data: tuples containing images as np arrays and their rotations
+    :param use_filter: whether or not to apply to transfer function filter
+    :param D_percent: what percent of the total 'box' does the rho take up
+    :return:
+    """
     N = data[0][0].shape[0]
     r = np.zeros(N)
-    r[N/8:(N/8)*7] = 1
+    D = int(D_percent*N)
+    r[D/2:N-(D/2)] = 1
     s = np.fft.fftshift(np.fft.fft(r))
+    # r is the rect function
     s = np.tile(s[np.newaxis, np.newaxis, :], (N, N, 1))
     B = np.zeros((N, N, N))
     if use_filter:
@@ -42,10 +46,13 @@ def back_project(data, use_filter=True):
                               N_range.reshape(1, N, 1, 1) * np.ones(N * N).reshape(N, 1, N, 1),
                               N_range.reshape(1, 1, N, 1) * np.ones(N * N).reshape(N, N, 1, 1)),
                              axis=3)
+        # pos gives a matrix of size N which at [x,y,z] returns a vector which we can transform from the image plane space
         B += inter(np.dot(pos, R.transpose()))
+        # we use R.transpose to transform all the vectors away from image plane space to the original
         if use_filter:
-            H += compute_h(R, N)
+            H += compute_h(R, D)
     if use_filter:
+        # H is defined in fourier space
         B_hat = np.fft.fftshift(np.fft.fftn(B))
         return np.real(np.fft.ifftn(np.fft.ifftshift(B_hat/H)))
     else:
